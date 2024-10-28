@@ -28,3 +28,10 @@ Classe habitante = {
     ...
 }
 
+Class vila = {
+    nomeVila,
+    listaHabitantes,
+    numeroHabitantes,
+    limiteHabitantes,
+    recursos[] recursos
+}

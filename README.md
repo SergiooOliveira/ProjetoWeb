@@ -19,6 +19,15 @@ Para aumentar o número de habitantes podemos constituir familia ou construir ma
 Dessa maneira o número limite de habitantes irá subir.
 Existe diferenças entre número de habitantes e número limite de habitantes. A vila pode ter capacidade para 15 habitantes mas apenas estarem lá a morar 7.
 
+
+Class vila = {
+    nomeVila,
+    listaHabitantes,
+    numeroHabitantes,
+    limiteHabitantes,
+    recursos[] recursos
+}
+
 Classe habitante = {
     nome,
     dataNascimento,
@@ -28,10 +37,7 @@ Classe habitante = {
     ...
 }
 
-Class vila = {
-    nomeVila,
-    listaHabitantes,
-    numeroHabitantes,
-    limiteHabitantes,
-    recursos[] recursos
+Classe recursos = {
+    tipoRecurso,
+    quantidade,
 }

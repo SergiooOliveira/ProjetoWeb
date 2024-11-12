@@ -4,7 +4,12 @@ import VillageInfo from './Village'
 function App() {
   return (
     <main>
-      <VillageInfo villageName={"NameTest"}/>
+      <header>
+        <VillageInfo villageName={"NameTest"}/>
+      </header>
+      <body>
+        
+      </body>
     </main>
   );
 }

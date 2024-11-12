@@ -1,0 +1,60 @@
+/* Header */
+header {
+    width:100%;
+    border: 1px solid red;
+    position: relative; 
+    padding: 0;
+    margin: 0;
+}
+
+/* Header class */
+.header {
+    display: flex;
+    flex-direction: row;    
+    align-items: flex-start;
+    justify-content: space-evenly;
+    padding: 0;
+    margin: 0;
+    width: 100%;
+}
+
+/* Left */
+.home {
+    flex: 1;
+    display: flex;
+    justify-content: space-evenly;
+    flex-wrap: wrap;
+    align-items: flex-start;
+    margin: 0;
+}
+
+/*
+.home div{
+    margin: 0 5px;
+}
+*/
+
+/* Centro */
+.title {
+    flex: 2;
+    display: flex;
+    justify-content: space-evenly;
+    flex-wrap: wrap;
+    align-items: flex-start;
+    margin: 0;
+}
+
+/* Direita */
+.contacts {
+    flex: 1;
+    display: flex;
+    justify-content: space-evenly;
+    flex-wrap: wrap;
+    align-items: flex-start;
+    margin: 0;
+}
+
+.header h3 {
+    margin: 0px;
+    padding: 10px;
+}

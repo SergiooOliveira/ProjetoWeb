@@ -1,0 +1,38 @@
+Class Village = {
+    villageName: string,
+    villageList: Villager[],
+    villagePopulation: int,
+    villagePopulationLimit: int,
+    resources: resource[]
+}
+
+Class Villager = {
+    name: string,
+    birtday: date/string,
+    job: string,
+    gender: char (M/F),
+    inventory: item[],
+    stats: stat[]
+}
+
+Class Stat = {
+    health: int,
+    strenght: int,
+    vigor: int
+}
+
+Class Item = {
+    itemType: string,
+    itemDescription: string,
+    quantity: int,
+    sellValue: float,
+    stackQuantity: int,
+    durability: int
+}
+
+itemType:
+    - resource
+    - gold
+    - equipment (Axe, Sword, Pickaxe)
+    - armor (Helmet, Chestplate, Leggings, Boots)
+    - acessories

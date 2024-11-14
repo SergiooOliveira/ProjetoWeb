@@ -1,17 +1,16 @@
 import './App.css';
-import VillageInfo from './Village'
+import Village from './Village'
+import Villager from './Villager';
 
-function App() {
+export default function App() {
   return (
     <main>
       <header>
-        <VillageInfo villageName={"NameTest"}/>
+        <Village villageName={"NameTest"}/>
       </header>
       <body>
-        
+        <Villager />
       </body>
     </main>
   );
 }
-
-export default App;

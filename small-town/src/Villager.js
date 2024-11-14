@@ -1,7 +1,7 @@
 import React, { Component } from 'react';
-import './Village.css';
+import './Villager.css';
 
-class Village extends Component {
+class Villager extends Component {
   // Constructor to initialize state and bind functions
   constructor(props) {
     super(props);
@@ -19,16 +19,18 @@ class Village extends Component {
   }
 
   showInfo() {
-    this.setState({ });
+    console.log(this.state.name)
   }
 
   render() {
     return (
+      <>
         <div>
             <button onClick={this.showInfo}>Show Info</button>
         </div>
+      </>
     );
   }
 }
 
-export default Village;
+export default Villager;

@@ -14,10 +14,9 @@ export default function App() {
   const [villagers, setVillagers] = useState([]);
   const [cityResources, setResources] = useState([])
 
-
   //#region Village functions
   // Function to create new Village
-  const createVillage = (populationLimit) => {
+  const createVillage = function(populationLimit) {
     // New Village properties
     const newVillage = {
       villageName: "My Village",

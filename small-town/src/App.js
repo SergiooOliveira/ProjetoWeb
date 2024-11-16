@@ -10,6 +10,8 @@ import React, { useState, useEffect } from 'react';
 //#endregion
 
 export default function App() {
+  //#region Variables
+  // useState
   const [village, setVillage] = useState(null)
   const [villagers, setVillagers] = useState([]);
   const [cityResources, setResources] = useState([])
@@ -18,6 +20,11 @@ export default function App() {
   const MaleNames = [ 'John', 'Mark', 'Carl' ]
   const FemaleNames = [ 'Charlotte', 'Amelia', 'Violet' ]
   const Jobs = [ 'Lumber', 'Baker', 'Miner' ]
+
+  // Grid
+  const gridSize = 10;
+  const [grid, setGrid] = useState(Array.from({ length: gridSize }, () => Array(gridSize).fill('empty')));
+  //#endregion
 
   //#region Village functions
   // Function to create new Village
@@ -88,6 +95,17 @@ export default function App() {
   };
   //#endregion
 
+  //#region Grid
+  // Function to place an item on the grid
+  const placeItem = (row, col) => {
+    // Copy the grid to update state immutably
+    const newGrid = grid.map((rowArray) => [...rowArray]);
+    // Toggle between empty and building for simplicity
+    newGrid[row][col] = newGrid[row][col] === 'empty' ? 'building' : 'empty';
+    setGrid(newGrid);
+  };
+  //#endregion
+
   // Call createVillage when the component mounts
   useEffect(() => {
     createVillage(20);
@@ -98,8 +116,11 @@ export default function App() {
   // JSX elements
   return (
     <main>
-      <div> {/* Header */}
-        <Village village={village}/>
+      <header>
+        <Village village={village}/>        
+      </header>
+
+      <body>
         <Villager createVillager={createVillager}/>
         <div>
           <h1>Villagers</h1>
@@ -109,7 +130,21 @@ export default function App() {
             ))}
           </ul>
         </div>
-      </div>
+
+        <div className="grid">
+          {grid.map((row, rowIndex) =>
+            row.map((cell, colIndex) => (
+              <div
+                key={`${rowIndex}-${colIndex}`}
+                className={`cell ${cell}`}
+                onClick={() => placeItem(rowIndex, colIndex)}
+              >
+                {cell === 'building' ? '🏗️' : ''}
+              </div>
+            ))
+          )}
+        </div>
+      </body>
     </main>
   );
 }

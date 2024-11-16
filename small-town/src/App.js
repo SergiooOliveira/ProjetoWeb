@@ -14,6 +14,11 @@ export default function App() {
   const [villagers, setVillagers] = useState([]);
   const [cityResources, setResources] = useState([])
 
+  // Arrays for dinamic villagers
+  const MaleNames = [ 'John', 'Mark', 'Carl' ]
+  const FemaleNames = [ 'Charlotte', 'Amelia', 'Violet' ]
+  const Jobs = [ 'Lumber', 'Baker', 'Miner' ]
+
   //#region Village functions
   // Function to create new Village
   const createVillage = function(populationLimit) {
@@ -34,12 +39,25 @@ export default function App() {
   // Function to create a new Villager
   const createVillager = function() {
     
+    let villagerGender = Math.floor(Math.random() * 2)
+    let name
+
+    if (villagerGender === 0) {
+      // if 0 is male
+      name = MaleNames[Math.floor(Math.random() * MaleNames.length)]
+    } else if (villagerGender === 1) {
+      // if 1 is female
+      name = FemaleNames[Math.floor(Math.random() * FemaleNames.length)]
+    } else {
+      console.log(villagerGender)
+    }
+
     const newVillager = {
       id: villagers.length + 1,
-      name: "John",
+      name: name,
       yearOfBirth: 2000,
-      job: "Lumber",
-      gender: 'M',
+      job: Jobs[Math.random() * (Jobs.length - 0) + 0],
+      gender: villagerGender,
       inventory: [],
       stats: []
     }

@@ -11,7 +11,7 @@ const Village = ({ village }) => {
 
   return (
     <>
-      <header>
+      <div>
         <div className='header'>
 
             <div className='home'>
@@ -27,7 +27,7 @@ const Village = ({ village }) => {
             </div>
 
         </div>        
-      </header>
+      </div>
     </>
   );
 }

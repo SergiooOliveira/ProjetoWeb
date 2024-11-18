@@ -1,13 +1,22 @@
-import React from 'react';
+import React, { useState } from 'react';
 import './Village.css';
 import './Villager.js';
   
-const Village = ({ village }) => {
-  
-  // Check if the village state is null
-  if (!village) {
-    return <div>Loading village...</div>;
-  }
+const Village = ({ defaultVillageName, defaultVillagePopulationLimit }) => {
+
+  // Village info
+  const [villageName, setVillagename] = useState(null)
+  const [villageList, setVillageList] = useState([null])
+  const [villagePopulation, setVillagePopulation] = useState(0)
+  const [villagePopulationLimit, setVillagePopulationLimit] = useState(0)
+  const [resources, setVillageResources] = useState([])
+
+  setVillagename(defaultVillageName);
+  setVillagePopulation(0);
+  setVillagePopulationLimit(defaultVillagePopulationLimit);
+
+  // Villager
+  const [villagers, setVillagers] = useState([]);
 
   return (
     <>
@@ -15,7 +24,7 @@ const Village = ({ village }) => {
         <div className='header'>
 
             <div className='home'>
-                <h3>👥{village.villagePopulation}/{village.villagePopulationLimit}</h3>
+                <h3>👥{villagePopulation}/{villagePopulationLimit}</h3>
             </div>
 
             <div className='title'>
@@ -23,7 +32,7 @@ const Village = ({ village }) => {
             </div>
             
             <div className='contacts'>
-                <h3>{village.villageName}</h3>
+                <h3>{villageName}</h3>
             </div>
 
         </div>        

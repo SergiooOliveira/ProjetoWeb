@@ -12,8 +12,12 @@ import React, { useState, useEffect } from 'react';
 export default function App() {
   //#region Variables
   // useState
-  const [village, setVillage] = useState(null)
-  const [villagers, setVillagers] = useState([]);
+
+  // default values
+  const [defaultVillageName, setVillageName] = useState("My Villager")
+  const [defaultPopulationlimit, setDefaultPL] = useState(20)
+
+  
   const [cityResources, setResources] = useState([])
 
   // Arrays for dinamic villagers
@@ -28,18 +32,7 @@ export default function App() {
 
   //#region Village functions
   // Function to create new Village
-  const createVillage = function(populationLimit) {
-    // New Village properties
-    const newVillage = {
-      villageName: "My Village",
-      villageList: villagers,
-      villagePopulation: 0,
-      villagePopulationLimit: populationLimit,
-      resources: cityResources
-    }
-
-    setVillage(newVillage)
-  };
+  
   //#endregion
 
   //#region Villager functions
@@ -108,20 +101,28 @@ export default function App() {
 
   // Call createVillage when the component mounts
   useEffect(() => {
-    createVillage(20);
-    createResources("wood", 100);
-    createResources("food", 100);
   }, []);
 
   // JSX elements
   return (
     <main>
       <header>
-        <Village village={village}/>        
+        <div className='home'>
+          <h3>👥{villagePopulation}/{villagePopulationLimit}</h3>
+        </div>
+
+        <div className='title'>
+          <h3>Teste de posição</h3>
+        </div>
+        
+        <div className='contacts'>
+          <h3>{villageName}</h3>
+        </div>
+        <Village villageName={defaultVillageName} villagePopulationLimit={defaultPopulationlimit}/>   
       </header>
 
-      <body>
-        <Villager createVillager={createVillager}/>
+      {/*<body>
+        <Villager />
         <div>
           <h1>Villagers</h1>
           <ul>
@@ -144,7 +145,7 @@ export default function App() {
             ))
           )}
         </div>
-      </body>
+      </body>*/}
     </main>
   );
 }

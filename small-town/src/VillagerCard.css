@@ -1,0 +1,28 @@
+.villagerList {
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: space-evenly;
+    gap: 10px;
+}
+
+.card {
+    width: 200px;
+    height: 200px;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;    
+}
+
+.face {
+    width: 200px;
+    height: 200px;
+    background-color: #3498db;
+    margin-bottom: 0px;
+}
+
+.name {
+    width: 200px;
+    height: 50px;
+    background-color: #e74c3c;
+}

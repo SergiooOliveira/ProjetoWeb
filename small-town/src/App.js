@@ -6,6 +6,7 @@ import React, { useState, useEffect } from 'react';
 //#region TODO:
 /*
   - Verify if resource type already exists in list and Add to it
+  - Get Male and Female names from API
 */
 //#endregion
 
@@ -121,14 +122,9 @@ export default function App() {
       </header>
 
       <body>
-        <Villager createVillager={createVillager}/>
+        <Villager createVillager={createVillager} villagers={villagers}/>
         <div>
-          <h1>Villagers</h1>
-          <ul>
-            {villagers.map(villager => (
-              <li key={villager.id}>{villager.name}</li>
-            ))}
-          </ul>
+          
         </div>
 
         <div className="grid">

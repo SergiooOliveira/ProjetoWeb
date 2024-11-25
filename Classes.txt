@@ -7,6 +7,7 @@ Class Village = {
 }
 
 Class Villager = {
+    id: int
     name: string,
     birtday: date/string,
     job: string,

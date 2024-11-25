@@ -7,22 +7,46 @@
 
 .card {
     width: 200px;
-    height: 200px;
+    background-color: #fff;
+    border-radius: 8px;
+    overflow: hidden;
+    box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+    margin: 10px;
     display: flex;
     flex-direction: column;
-    justify-content: center;
-    align-items: center;    
 }
 
-.face {
-    width: 200px;
-    height: 200px;
-    background-color: #3498db;
-    margin-bottom: 0px;
+.card img {
+    border: 8px;
 }
 
-.name {
-    width: 200px;
-    height: 50px;
-    background-color: #e74c3c;
+.card-details {
+    background-color: #4CAF50;
+    color: white;
+    text-align: center;
+    padding: 5px;
+    font-size: 14px;
+    font-weight: bold;
+}
+
+.card-details .more-options {
+    float: right;
+    font-size: 16px;
+    cursor: pointer;
+}
+
+.hidden {
+    display: none;
+}
+
+.card-expanded {
+    display: none;
+    background-color: #EAEAEA;
+    color: black;
+    padding: 10px;
+    font-size: 12px;
+}
+  
+.card-expanded p {
+    margin: 5px 0;
 }

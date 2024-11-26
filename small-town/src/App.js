@@ -20,7 +20,7 @@ export default function App() {
   // Arrays for dinamic villagers
   const MaleNames = [ 'John', 'Mark', 'Carl' ]
   const FemaleNames = [ 'Charlotte', 'Amelia', 'Violet' ]
-  const Jobs = [ 'Lumber', 'Baker', 'Miner' ]
+  const Jobs = [ 'Lumber', 'Baker', 'Miner', 'Builder', 'Farmer', 'Hunter' ]
 
   // Grid
   const gridSize = 10;
@@ -81,6 +81,45 @@ export default function App() {
     } else
       console.log("Limit reached")
   };
+
+  const testData = function() {
+    const defaultVillager1 = {
+      id: 0,
+      name: "John",
+      yearOfBirth: 2000,
+      job: Jobs[Math.floor(Math.random() * (Jobs.length - 0) + 0)],
+      gender: 'M',
+      inventory: {
+        name: "wood",
+        quantity: 100,
+      },
+      stats: {
+        health: 100,
+        strength  : 10,
+        vigor: 20,
+      }
+    }
+
+    const defaultVillager2 = {
+      id: 1,
+      name: "Sarah",
+      yearOfBirth: 2000,
+      job: Jobs[Math.floor(Math.random() * (Jobs.length - 0) + 0)],
+      gender: 'F',
+      inventory: {
+        name: "wood",
+        quantity: 100,
+      },
+      stats: {
+        health: 100,
+        strength: 10,
+        vigor: 20,
+      }
+    }
+
+    setVillagers([...villagers, defaultVillager1])
+    setVillagers([...villagers, defaultVillager2])
+  }
   //#endregion
 
   //#region Resources functions
@@ -112,6 +151,7 @@ export default function App() {
     createVillage(20);
     createResources("wood", 100);
     createResources("food", 100);
+    testData();
   }, []);
 
   // JSX elements

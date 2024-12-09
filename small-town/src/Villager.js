@@ -15,7 +15,8 @@ const Villager = ({ createVillager, villagers }) => {
       </div>
       <h1>Villagers</h1>
       <div>
-          <VillagerCard villagers={villagers}/>
+          {/*<VillagerCard villagers={villagers}/>*/}
+          
       </div>
     </>
   );

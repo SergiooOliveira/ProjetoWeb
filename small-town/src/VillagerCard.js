@@ -2,10 +2,8 @@ import React, { useState } from 'react';
 import './VillagerCard.css';
 
 /*#Region To-do
-  Fix villager list presentation
+  Fix villager list presentation (Height not matching)
   Fix the way villagers are created
-
-  hidden class not working as intended
 */
 
 const VillagerCard = ({ villagers }) => {

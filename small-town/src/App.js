@@ -169,23 +169,30 @@ export default function App() {
       </header>
 
       <body>
-        <Villager createVillager={createVillager} villagers={villagers}/>
-        <div>
-          
+      <div className='content'>        
+        <div className='villagerList'>
+          <Villager createVillager={createVillager} villagers={villagers}/>
         </div>
 
-        <div className="grid">
-          {grid.map((row, rowIndex) =>
-            row.map((cell, colIndex) => (
-              <div
-                key={`${rowIndex}-${colIndex}`}
-                className={`cell ${cell}`}
-                onClick={() => placeItem(rowIndex, colIndex)}
-              >
-                {cell === 'building' ? '🏗️' : ''}
-              </div>
-            ))
-          )}
+        <div className='game'>
+          <div className="grid">
+            {grid.map((row, rowIndex) =>
+              row.map((cell, colIndex) => (
+                <div
+                  key={`${rowIndex}-${colIndex}`}
+                  className={`cell ${cell}`}
+                  onClick={() => placeItem(rowIndex, colIndex)}
+                >
+                  {cell === 'building' ? '🏗️' : ''}
+                </div>
+              ))
+            )}
+          </div>
+        </div>
+
+        <div className='eventList'>
+
+        </div>  
         </div>
       </body>
     </main>

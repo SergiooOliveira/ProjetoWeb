@@ -27,6 +27,8 @@ export default function App() {
   const [grid, setGrid] = useState(Array.from({ length: gridSize }, () => Array(gridSize).fill('empty')));
   //#endregion
 
+  console.log()
+
   //#region Village functions
   // Function to create new Village
   const createVillage = function(populationLimit) {
@@ -119,6 +121,12 @@ export default function App() {
 
     setVillagers([...villagers, defaultVillager1])
     setVillagers([...villagers, defaultVillager2])
+    
+    setVillage((prevVillage) => ({
+      ...prevVillage,
+      villagePopulation: villagers.length + 1
+    }))
+
   }
   //#endregion
 

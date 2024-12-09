@@ -7,17 +7,13 @@
 
 .card {
     width: 200px;
+    min-height: 150px;
     background-color: #fff;
     border-radius: 8px;
-    overflow: hidden;
     box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
     margin: 10px;
     display: flex;
     flex-direction: column;
-}
-
-.card img {
-    border: 8px;
 }
 
 .card-details {
@@ -27,6 +23,10 @@
     padding: 5px;
     font-size: 14px;
     font-weight: bold;
+}
+
+.card img {
+    border: 8px;
 }
 
 .card-details .more-options {
@@ -40,13 +40,11 @@
 }
 
 .card-expanded {
-    display: none;
-    background-color: #EAEAEA;
     color: black;
     padding: 10px;
     font-size: 12px;
 }
-  
-.card-expanded p {
-    margin: 5px 0;
+
+.content {
+    overflow-y: auto;
 }

@@ -11,6 +11,7 @@ import React, { useState, useEffect } from 'react';
 //#endregion
 
 export default function App() {
+
   //#region Variables
   // useState
   const [village, setVillage] = useState(null)
@@ -26,8 +27,6 @@ export default function App() {
   const gridSize = 10;
   const [grid, setGrid] = useState(Array.from({ length: gridSize }, () => Array(gridSize).fill('empty')));
   //#endregion
-
-  console.log()
 
   //#region Village functions
   // Function to create new Village

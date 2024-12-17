@@ -14,10 +14,15 @@ const Villager = ({ createVillager, villagers }) => {
           <button onClick={createVillager}>Create Villager</button>
       </div>
       <h1>Villagers</h1>
-      <div>
+      
+      {villagers.map((villager) => (
+      <div key={villager.id}>
+        <ul>
+          <li><span>{villager.name}</span></li>
           {/*<VillagerCard villagers={villagers}/>*/}
-          
+        </ul>
       </div>
+      ))}
     </>
   );
 }

@@ -8,21 +8,29 @@ import VillagerCard from './VillagerCard';
 */
 
 const Villager = ({ createVillager, villagers }) => {
+
+  function liClickHandler(event) {
+    console.log("Clicked: ", event.villager.id)
+  }
+
+  const liElements = document.querySelectorAll('li');
+  liElements.forEach(function(li) {
+    li.addEventListener('click', liClickHandler)
+  })
+
   return (
     <>
-      <div>
-          <button onClick={createVillager}>Create Villager</button>
+      <div className='villagerListTitle'>
+        <h1>Villagers</h1>
+        <button onClick={createVillager}>Create Villager</button>
       </div>
-      <h1>Villagers</h1>
-      
-      {villagers.map((villager) => (
-      <div key={villager.id}>
-        <ul>
-          <li><span>{villager.name}</span></li>
-          {/*<VillagerCard villagers={villagers}/>*/}
+      <div className='villagerListElements'>
+        <ul id="villagerName">
+          {villagers.map((villager) => (            
+            <li key={villager.id}><span>{villager.name}</span></li>
+          ))}
         </ul>
       </div>
-      ))}
     </>
   );
 }

@@ -170,7 +170,7 @@ export default function App() {
 
       <body>
       <div className='content'>        
-        <div className='villagerList'>
+        <div className='villagerListApp'>
           <Villager createVillager={createVillager} villagers={villagers}/>
         </div>
 

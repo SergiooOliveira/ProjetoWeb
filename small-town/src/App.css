@@ -72,10 +72,12 @@
   width: 100%;
 }
 
-.villagerList {
+.villagerListApp {
   border: solid 1px violet;
   flex: 1;
   margin: 10px;
+  flex-direction: column;
+  flex-wrap: wrap;
 }
 
 .game {

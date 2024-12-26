@@ -8,14 +8,34 @@ import VillagerCard from './VillagerCard';
 */
 
 const Villager = ({ createVillager, villagers }) => {
+
+  function liClickHandler(event, villager) {
+    console.log("Clicked: ", villager.id)
+  }
+
   return (
     <>
-      <div>
-          <button onClick={createVillager}>Create Villager</button>
+      <div className='villagerListTitle'>
+        <h1>Villagers</h1>
+        <button onClick={createVillager}>Create Villager</button>
       </div>
-      <h1>Villagers</h1>
       <div>
-          <VillagerCard villagers={villagers}/>
+        <div className='villagerListGroup'>
+          <ul className='villagerListElements'>
+            {villagers.map((villager) => (
+              <li
+                key={villager.id}
+                onClick={(event) => liClickHandler(event, villager)}
+              >
+                <img></img>
+                <span>{villager.name}</span>
+              </li>
+            ))}
+          </ul>
+          <div className='villagerListDetails'>
+
+          </div>
+        </div>
       </div>
     </>
   );

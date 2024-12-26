@@ -11,6 +11,7 @@ import React, { useState, useEffect } from 'react';
 //#endregion
 
 export default function App() {
+
   //#region Variables
   // useState
   const [village, setVillage] = useState(null)
@@ -119,6 +120,12 @@ export default function App() {
 
     setVillagers([...villagers, defaultVillager1])
     setVillagers([...villagers, defaultVillager2])
+    
+    setVillage((prevVillage) => ({
+      ...prevVillage,
+      villagePopulation: villagers.length + 1
+    }))
+
   }
   //#endregion
 
@@ -162,23 +169,30 @@ export default function App() {
       </header>
 
       <body>
-        <Villager createVillager={createVillager} villagers={villagers}/>
-        <div>
-          
+      <div className='content'>        
+        <div className='villagerListApp'>
+          <Villager createVillager={createVillager} villagers={villagers}/>
         </div>
 
-        <div className="grid">
-          {grid.map((row, rowIndex) =>
-            row.map((cell, colIndex) => (
-              <div
-                key={`${rowIndex}-${colIndex}`}
-                className={`cell ${cell}`}
-                onClick={() => placeItem(rowIndex, colIndex)}
-              >
-                {cell === 'building' ? '🏗️' : ''}
-              </div>
-            ))
-          )}
+        <div className='game'>
+          <div className="grid">
+            {grid.map((row, rowIndex) =>
+              row.map((cell, colIndex) => (
+                <div
+                  key={`${rowIndex}-${colIndex}`}
+                  className={`cell ${cell}`}
+                  onClick={() => placeItem(rowIndex, colIndex)}
+                >
+                  {cell === 'building' ? '🏗️' : ''}
+                </div>
+              ))
+            )}
+          </div>
+        </div>
+
+        <div className='eventList'>
+
+        </div>  
         </div>
       </body>
     </main>

@@ -62,3 +62,32 @@
 .cell.building {
   background-color: #8bc34a; /* Example color for buildings */
 }
+
+.content {
+  display: flex;
+  flex-direction: row;    
+  justify-content: space-between;
+  padding: 0;
+  margin: 0;
+  width: 100%;
+}
+
+.villagerListApp {
+  border: solid 1px violet;
+  flex: 1;
+  margin: 10px;
+  flex-direction: column;
+  flex-wrap: wrap;
+}
+
+.game {
+  border: solid 1px blue;
+  flex: 2;
+  margin: 10px;
+}
+
+.eventList {
+  border: solid 1px red;
+  flex: 1;
+  margin: 10px;
+}

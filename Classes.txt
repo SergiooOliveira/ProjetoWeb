@@ -32,8 +32,8 @@ Class Item = {
 }
 
 itemType:
-    - resource
-    - gold
+    - resource - 1
+    - gold - 2
     - equipment (Axe, Sword, Pickaxe)
     - armor (Helmet, Chestplate, Leggings, Boots)
     - acessories

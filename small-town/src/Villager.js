@@ -9,14 +9,9 @@ import VillagerCard from './VillagerCard';
 
 const Villager = ({ createVillager, villagers }) => {
 
-  function liClickHandler(event) {
-    console.log("Clicked: ", event.villager.id)
+  function liClickHandler(event, villager) {
+    console.log("Clicked: ", villager.id)
   }
-
-  const liElements = document.querySelectorAll('li');
-  liElements.forEach(function(li) {
-    li.addEventListener('click', liClickHandler)
-  })
 
   return (
     <>
@@ -24,12 +19,23 @@ const Villager = ({ createVillager, villagers }) => {
         <h1>Villagers</h1>
         <button onClick={createVillager}>Create Villager</button>
       </div>
-      <div className='villagerListElements'>
-        <ul id="villagerName">
-          {villagers.map((villager) => (            
-            <li key={villager.id}><span>{villager.name}</span></li>
-          ))}
-        </ul>
+      <div>
+        <div className='villagerListGroup'>
+          <ul className='villagerListElements'>
+            {villagers.map((villager) => (
+              <li
+                key={villager.id}
+                onClick={(event) => liClickHandler(event, villager)}
+              >
+                <img></img>
+                <span>{villager.name}</span>
+              </li>
+            ))}
+          </ul>
+          <div className='villagerListDetails'>
+
+          </div>
+        </div>
       </div>
     </>
   );

@@ -8,6 +8,38 @@ body {
     justify-content: space-around;
 }
 
+.villagerListGroup {
+    display: flex;
+    flex-direction: row;
+}
+
 .villagerListElements {
+    border: solid 1px violet;
+    display: flex;
+    flex: 1;
+    flex-direction: column;
     align-items: flex-start;
+    justify-content: center;
+}
+
+.villagerListElements li {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+}
+
+.villagerListElements img {
+    border: solid 1px red;
+    width: 20px;
+    height: 20px;
+}
+
+.villagerListElements span {
+    align-items: center;
+    line-height: 1.5;
+}
+
+.villagerListDetails {
+    border: solid 1px blue;
+    flex: 1;
 }

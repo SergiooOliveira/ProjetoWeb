@@ -91,3 +91,12 @@
   flex: 1;
   margin: 10px;
 }
+
+.eventList-ResourceControlHud {
+  border: solid 1px violet;
+  height: 25px;
+  display: flex;
+  flex-direction: row;
+  justify-content: space-evenly;
+  align-items: center;
+}

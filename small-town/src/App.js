@@ -1,6 +1,7 @@
 import './App.css';
 import Village from './Village'
 import Villager from './Villager';
+import Resources from './Resources';
 import React, { useState, useEffect } from 'react';
 
 //#region TODO:
@@ -118,7 +119,7 @@ export default function App() {
       }
     }
 
-    setVillagers([...villagers, defaultVillager1])
+    setVillagers(defaultVillager1)
     setVillagers([...villagers, defaultVillager2])
     
     setVillage((prevVillage) => ({
@@ -130,15 +131,47 @@ export default function App() {
   //#endregion
 
   //#region Resources functions
-  // Function to manage resources
-  const createResources = function(type, quantity) {
-    const newResource = {
-      type: type,
-      quantity: quantity
-    }
+  // Resource initializer
+  const resourceInitializer = function () {
+    const resources = [
+      { type: "gold", quantity: 0 },
+      { type: "food", quantity: 0 },
+      { type: "wood", quantity: 0 },
+      { type: "stone", quantity: 0 },
+    ];
 
-    // Add new resource to list
-    setResources([...cityResources, newResource]);
+    setResources(resources)
+  }
+
+  const generateRandomResource = function () {
+    let type = Math.floor(Math.random() * 4)
+    let quantity = Math.floor(Math.random() * 100)
+
+    const resources = [ 'gold', 'food', 'wood', 'stone' ]
+
+    createResources(resources[type], quantity)
+  }
+
+  // Function to manage resources
+  const createResources = function (type, quantity) {
+    // Find the resource matching the specified type
+    const resourceIndex = cityResources.findIndex(resource => resource.type === type);
+  
+    if (resourceIndex !== -1) {
+      // Copy the current resources array
+      const updatedResources = [...cityResources];
+  
+      // Update the quantity of the matching resource
+      updatedResources[resourceIndex] = {
+        ...updatedResources[resourceIndex],
+        quantity: updatedResources[resourceIndex].quantity + quantity,
+      };
+  
+      // Set the updated resources array
+      setResources(updatedResources);
+    } else {
+      console.error(`Resource of type "${type}" not found.`);
+    }
   };
   //#endregion
 
@@ -156,9 +189,8 @@ export default function App() {
   // Call createVillage when the component mounts
   useEffect(() => {
     createVillage(20);
-    createResources("wood", 100);
-    createResources("food", 100);
     testData();
+    resourceInitializer();
   }, []);
 
   // JSX elements
@@ -191,7 +223,10 @@ export default function App() {
         </div>
 
         <div className='eventList'>
-
+          <div className='eventList-ResourceControlHud'>
+            <Resources cityResources={cityResources}/>
+          </div>
+          <button onClick={generateRandomResource}>Create Resource</button>
         </div>  
         </div>
       </body>

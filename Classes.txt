@@ -37,3 +37,8 @@ itemType:
     - equipment (Axe, Sword, Pickaxe)
     - armor (Helmet, Chestplate, Leggings, Boots)
     - acessories
+
+Resources:
+    - Gold
+    - Wood
+    - Stone

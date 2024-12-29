@@ -8,8 +8,6 @@ const Resources = ({ cityResources }) => {
         wood: '🪵',
         stone: '🪨',
     };
-
-    console.log(cityResources)
     
     return (
     <>

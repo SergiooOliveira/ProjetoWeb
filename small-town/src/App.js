@@ -2,6 +2,7 @@ import './App.css';
 import Village from './Village'
 import Villager from './Villager';
 import Resources from './Resources';
+import Game from './Game';
 import React, { useState, useEffect } from 'react';
 
 //#region TODO:
@@ -133,11 +134,13 @@ export default function App() {
   //#region Resources functions
   // Resource initializer
   const resourceInitializer = function () {
+  console.log("Resource Initializer")
+
     const resources = [
-      { type: "gold", quantity: 0 },
-      { type: "food", quantity: 0 },
-      { type: "wood", quantity: 0 },
-      { type: "stone", quantity: 0 },
+      { type: "gold", quantity: 50 },
+      { type: "food", quantity: 50 },
+      { type: "wood", quantity: 50 },
+      { type: "stone", quantity: 50 },
     ];
 
     setResources(resources)
@@ -175,17 +178,6 @@ export default function App() {
   };
   //#endregion
 
-  //#region Grid
-  // Function to place an item on the grid
-  const placeItem = (row, col) => {
-    // Copy the grid to update state immutably
-    const newGrid = grid.map((rowArray) => [...rowArray]);
-    // Toggle between empty and building for simplicity
-    newGrid[row][col] = newGrid[row][col] === 'empty' ? 'building' : 'empty';
-    setGrid(newGrid);
-  };
-  //#endregion
-
   // Call createVillage when the component mounts
   useEffect(() => {
     createVillage(20);
@@ -207,19 +199,7 @@ export default function App() {
         </div>
 
         <div className='game'>
-          <div className="grid">
-            {grid.map((row, rowIndex) =>
-              row.map((cell, colIndex) => (
-                <div
-                  key={`${rowIndex}-${colIndex}`}
-                  className={`cell ${cell}`}
-                  onClick={() => placeItem(rowIndex, colIndex)}
-                >
-                  {cell === 'building' ? '🏗️' : ''}
-                </div>
-              ))
-            )}
-          </div>
+          <Game grid={grid} setGrid={setGrid} cityResources={cityResources} setResources={setResources}/>
         </div>
 
         <div className='eventList'>

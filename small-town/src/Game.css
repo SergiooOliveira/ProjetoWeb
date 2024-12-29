@@ -1,0 +1,63 @@
+.game-BuildingMenu {
+    display: flex;
+    overflow: hidden;
+    position: relative;
+    flex-wrap: wrap;
+    flex-direction: column;
+    gap: 5px;
+    padding: 10px;
+    background-color: #f9f9f9;
+    border: solid 1px #ddd;
+    border-radius: 8px;
+}
+
+.game-BuildingMenu-Icon {
+    position: relative;
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    width: 60px;
+    height: 60px;
+    margin: 5px;
+    font-size: 24px;
+    border: solid 2px transparent;
+    border-radius: 8px;
+    background-color: #f4f4f4;
+    transition: transform 0.2s, background-color 0.2s, border-color 0.2s;
+    cursor: pointer;
+}
+
+.game-BuildingMenu-Icon:hover {
+    background-color: #e0e0e0;
+    border-color: #ddd;
+    transform: scale(1.1);
+}
+
+.game-BuildingMenu-Icon.selected {
+    border-color: #f0c040;
+    background-color: #ddeaa7;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
+    transform: scale(1.15);
+}
+
+.game-BuildingMenu-Icon:hover::after {
+    content: attr(data-reference);
+    position: absolute;
+    top: -35px;
+    left: 50%;
+    transform: translateX(-50%);
+    background-color: #333;
+    color: #fff;
+    padding: 5px 10px;
+    border-radius: 4px;
+    font-size: 12px;
+    white-space: nowrap;
+    pointer-events: none;
+    opacity: 0;
+    transition: opacity 0.2s;
+    z-index: 10;
+}
+
+.game-BuildingMenu-Icon:hover::after {
+    opacity: 1;
+}

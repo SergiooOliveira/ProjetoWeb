@@ -1,6 +1,18 @@
 import React, { useState } from 'react';
 import './Game.css'
 
+//#region TODO:
+/*
+    - Fix grid height
+    - Create override so first building of each is free
+    - Tweak cost
+    - Create some objectives for player to complete
+    - Create Gameloop
+    - Create Workplaces in each building so the villagers have something to do
+    - Develop the behaviour of each building
+*/
+//#endregion
+
 const Game = ({ grid, setGrid, cityResources, setResources }) => {
 
     // State for Selected building
@@ -59,6 +71,22 @@ const Game = ({ grid, setGrid, cityResources, setResources }) => {
         },
         { reference: "farm", icon: '🌾',
             behaviour: () => farm(),
+            cost: [
+                {type: 'gold', quantity: 5},
+                {type: 'wood', quantity: 10},
+                {type: 'stone', quantity: 5},
+            ]
+        },
+        { reference: "hunter", icon: '⚔️',
+            behaviour: () => hunter(),
+            cost: [
+                {type: 'gold', quantity: 5},
+                {type: 'wood', quantity: 10},
+                {type: 'stone', quantity: 5},
+            ]
+        },
+        { reference: "fisher", icon: '🎣',
+            behaviour: () => fisher(),
             cost: [
                 {type: 'gold', quantity: 5},
                 {type: 'wood', quantity: 10},
@@ -143,6 +171,14 @@ const Game = ({ grid, setGrid, cityResources, setResources }) => {
     }
 
     function farm () {
+        // For each farm it increases the amount of food it collects
+    }
+
+    function hunter () {
+        // For each farm it increases the amount of food it collects as well some other material as leather and wool
+    }
+
+    function fisher () {
         // For each farm it increases the amount of food it collects
     }
     //#endregion

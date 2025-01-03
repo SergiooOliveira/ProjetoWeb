@@ -28,6 +28,7 @@ const Game = ({ grid, setGrid, cityResources, setResources, villagers, setVillag
     // Hire Vilaggers modal
     const [isModalOpen, setModalOpen] = useState(false); // Modal toggle
     const [availableVillagers, setAvailableVillagers] = useState([]); // Villagers to display
+
     //#endregion
 
     //#region Building Icons
@@ -149,8 +150,9 @@ const Game = ({ grid, setGrid, cityResources, setResources, villagers, setVillag
                 const newGrid = [...prevGrid];
                 newGrid[rowIndex][colIndex] = {
                     type: selectedBuilding.reference,
-                    id: [rowIndex][colIndex],
-                    workers: 0
+                    id: `${rowIndex}-${colIndex}`,
+                    workers: [],
+                    coordinates: { row: rowIndex, col: colIndex }
                 }
                 return newGrid;
             });
@@ -183,13 +185,15 @@ const Game = ({ grid, setGrid, cityResources, setResources, villagers, setVillag
                 Object.entries(buildingCount.current).forEach(([buildingType, count]) => {
                     switch (buildingType) {
                         case "Lumberjack":
-                            addResources("wood", count * 10); // Example rate
+                            addResources("wood", count * 2);    // Getting 2 wood/s
+                            addResources("food", count * -1);   // Consuming 1 food/s
                             break;
                         case "Miner":
-                            addResources("stone", count * 5); // Example rate
+                            addResources("stone", count * 1);   // Getting 1 stone/s
+                            addResources("food", count * -1);   // Consuming 1 food/s
                             break;
                         case "Farm":
-                            addResources("food", count * 8); // Example rate
+                            addResources("food", count * 1);    // Getting 1 food/s
                             break;
                         // Add other building behaviors here
                         default:
@@ -206,17 +210,6 @@ const Game = ({ grid, setGrid, cityResources, setResources, villagers, setVillag
         loop(); // Start the loop
     };
 
-    const addResources = (type, amount) => {
-        console.log(`Adding ${amount} of ${type}`);
-        setResources((prevResources) =>
-            prevResources.map((resource) =>
-                resource.type === type
-                    ? { ...resource, quantity: resource.quantity + amount }
-                    : resource
-            )
-        );
-    };
-
     const handleCellClick = (rowIndex, colIndex) => {
         const cellData = grid[rowIndex][colIndex]
 
@@ -228,6 +221,20 @@ const Game = ({ grid, setGrid, cityResources, setResources, villagers, setVillag
     }
     //#endregion
 
+    //#region Resource Management
+    const addResources = (type, amount) => {
+        console.log(`Adding ${amount} of ${type}`);
+        setResources((prevResources) =>
+            prevResources.map((resource) =>
+                resource.type === type
+                    ? { ...resource, quantity: resource.quantity + amount }
+                    : resource
+            )
+        );
+    };
+    //#endregion
+
+
     //#region Modal
     const openModal = () => {
         setAvailableVillagers(villagers.filter(villager => villager.job === null)); // Filter unassigned villagers
@@ -237,12 +244,40 @@ const Game = ({ grid, setGrid, cityResources, setResources, villagers, setVillag
     const closeModal = () => setModalOpen(false);
 
     const hireVillager = (villagerId) => {
-        setVillagers(prevVillagers =>
-            prevVillagers.map(villager =>
-                villager.id === villagerId ? { ...villager, job: selectedBuilding.reference } : villager
+        setVillagers((prevVillagers) =>
+            prevVillagers.map((villager) =>
+                villager.id === villagerId ? {
+                    ...villager,
+                    job: clickedBuilding.type,
+                    assignedBuildingID: clickedBuilding.id
+                 } : villager
             )
         );
-        alert('Villager hired successfully!');
+        
+        if (clickedBuilding.coordinates) {
+            const { row, col } = clickedBuilding.coordinates
+         
+            setGrid((prevGrid) => {
+                const newGrid = [...prevGrid]
+                
+                // Ensure workers array is defined
+                const building = newGrid[row][col]
+                if (!building.workers) {
+                    building.workers = []
+                }
+
+                // Add the villager only if they're not already in the list
+                if (!building.workers.includes(villagerId)) {
+                    building.workers.push(villagerId)
+                }
+                
+                return newGrid
+            })
+        } else console.error("Building coordinates are missing")
+
+        
+
+        alert(`Villager ${villagerId} Hired`)
         closeModal();
     };
     //#endregion
@@ -308,6 +343,19 @@ const Game = ({ grid, setGrid, cityResources, setResources, villagers, setVillag
                         </div>
                         <div className="game-SelectedBuilding-Content-Buttons">
                             <button onClick={openModal}>Hire a Villager</button>
+                        </div>
+                        <div className='game-SelectedBuilding-Content-Workers'>
+                            <h3>Assigned Workers</h3>
+                            {clickedBuilding.workers && clickedBuilding.workers.length > 0 ? (
+                                <ul>
+                                    {clickedBuilding.workers.map(workerId => {
+                                        const worker = villagers.find(v => v.id === workerId)
+                                        return <li key={workerId}>{worker?.name || 'Unknown Worker'}</li>
+                                    })}
+                                </ul>
+                            ) : (
+                                <p>No workers assigned</p>
+                            )}
                         </div>
                     </div>                
                 ) : null }

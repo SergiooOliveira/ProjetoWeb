@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect, useRef } from 'react';
 import './Game.css'
 
 //#region TODO:
@@ -13,10 +13,22 @@ import './Game.css'
 */
 //#endregion
 
-const Game = ({ grid, setGrid, cityResources, setResources }) => {
+const Game = ({ grid, setGrid, cityResources, setResources, villagers, setVillagers }) => {
 
+    //#region Variables
     // State for Selected building
     const [selectedBuilding, setSelectedBuilding] = useState(null)
+    const [clickedBuilding, setclickedBuilding] = useState({})
+    const loopActive = useRef(false); // Indicates if the game loop is running
+
+    // Tracks the number of each building type
+    // 'maxWorks' can change depending on upgrades
+    const buildingCount = useRef({});
+
+    // Hire Vilaggers modal
+    const [isModalOpen, setModalOpen] = useState(false); // Modal toggle
+    const [availableVillagers, setAvailableVillagers] = useState([]); // Villagers to display
+    //#endregion
 
     //#region Building Icons
     const buildingIcons = [
@@ -28,65 +40,56 @@ const Game = ({ grid, setGrid, cityResources, setResources }) => {
                 {type: 'stone', quantity: 0},
             ]
         },*/
-        //{ reference: "building", icon: '🏗️'},
-        { reference: "road", icon: '🛣️',
-            behaviour: () => null,
+        { reference: "Road", icon: '🛣️',
             cost: [
                 {type: 'gold', quantity: 5},
                 {type: 'wood', quantity: 0},
                 {type: 'stone', quantity: 10},
             ]
         },
-        { reference: "townHall", icon: '🏛️',
-            behaviour: () => townHall(),
+        { reference: "Town Hall", icon: '🏛️',
             cost: [
                 {type: 'gold', quantity: 10},
                 {type: 'wood', quantity: 10},
                 {type: 'stone', quantity: 10},
             ]
         },
-        { reference: "house", icon: '🏠',
-            behaviour: () => house(),
+        { reference: "House", icon: '🏠',
             cost: [
                 {type: 'gold', quantity: 20},
                 {type: 'wood', quantity: 20},
                 {type: 'stone', quantity: 20},
             ]
         },
-        { reference: "lumberjack", icon: '🪓',
-            behaviour: () => lumberjack(),
+        { reference: "Lumberjack", icon: '🪓',
             cost: [
                 {type: 'gold', quantity: 10},
                 {type: 'wood', quantity: 10},
                 {type: 'stone', quantity: 0},
             ]
         },
-        { reference: "miner", icon: '⛏️',
-            behaviour: () => miner(),
+        { reference: "Miner", icon: '⛏️',
             cost: [
                 {type: 'gold', quantity: 10},
                 {type: 'wood', quantity: 10},
                 {type: 'stone', quantity: 10},
             ]
         },
-        { reference: "farm", icon: '🌾',
-            behaviour: () => farm(),
+        { reference: "Farm", icon: '🌾',
             cost: [
                 {type: 'gold', quantity: 5},
                 {type: 'wood', quantity: 10},
                 {type: 'stone', quantity: 5},
             ]
         },
-        { reference: "hunter", icon: '⚔️',
-            behaviour: () => hunter(),
+        { reference: "Hunter", icon: '⚔️',
             cost: [
                 {type: 'gold', quantity: 5},
                 {type: 'wood', quantity: 10},
                 {type: 'stone', quantity: 5},
             ]
         },
-        { reference: "fisher", icon: '🎣',
-            behaviour: () => fisher(),
+        { reference: "Fisher", icon: '🎣',            
             cost: [
                 {type: 'gold', quantity: 5},
                 {type: 'wood', quantity: 10},
@@ -96,6 +99,7 @@ const Game = ({ grid, setGrid, cityResources, setResources }) => {
     ];
     //#endregion
 
+    //#region Functions
     function buildingSelecter(reference) {
         const building = buildingIcons.find((b) => b.reference === reference)
         if (!building) return;
@@ -130,7 +134,7 @@ const Game = ({ grid, setGrid, cityResources, setResources }) => {
             return;
         }
     
-        if (grid[rowIndex][colIndex] !== 'empty') {
+        if (grid[rowIndex][colIndex].type !== 'empty') {
             alert('This cell is already occupied!');
             return;
         }
@@ -143,75 +147,174 @@ const Game = ({ grid, setGrid, cityResources, setResources }) => {
             // Update the grid to include the placed building
             setGrid((prevGrid) => {
                 const newGrid = [...prevGrid];
-                newGrid[rowIndex][colIndex] = selectedBuilding.reference;
+                newGrid[rowIndex][colIndex] = {
+                    type: selectedBuilding.reference,
+                    id: [rowIndex][colIndex],
+                    workers: 0
+                }
                 return newGrid;
             });
             console.log(`${selectedBuilding.reference} placed at [${rowIndex}, ${colIndex}]`);
-            selectedBuilding.behaviour();
+            
+            buildingCount.current[selectedBuilding.reference] =
+                (buildingCount.current[selectedBuilding.reference] || 0) + 1;            
+            if (!loopActive.current) startGameLoop(); // Ensure game loop is running
+
         } else {
             alert('Not enough resources to place this building!');
         }
     };
 
-    //#region Behaviours
-    function townHall () {
-        console.log("Placed 1 townhall")
-    }
+    const startGameLoop = () => {
 
-    function house () {
-        // For each house he consumes more food
-    }
+        console.log("Game Loop Started")
 
-    function lumberjack () {
-        // For each lumberjack it increases the amount of wood it collects
-    }
+        loopActive.current = true;
+        let lastUpdateTime = Date.now(); // Tracks the last update time
 
-    function miner () {
-        // For each miner it increases the amount of stone it collects
-    }
+        const loop = () => {
+            if (!loopActive.current) return; // Stop the loop if inactive
 
-    function farm () {
-        // For each farm it increases the amount of food it collects
-    }
+            const now = Date.now();
+            const elapsedTime = (now - lastUpdateTime) / 1000; // Time in seconds
 
-    function hunter () {
-        // For each farm it increases the amount of food it collects as well some other material as leather and wool
-    }
+            if (elapsedTime >= 1) { // Update resources once every second
+                // Resource generation based on active buildings
+                Object.entries(buildingCount.current).forEach(([buildingType, count]) => {
+                    switch (buildingType) {
+                        case "Lumberjack":
+                            addResources("wood", count * 10); // Example rate
+                            break;
+                        case "Miner":
+                            addResources("stone", count * 5); // Example rate
+                            break;
+                        case "Farm":
+                            addResources("food", count * 8); // Example rate
+                            break;
+                        // Add other building behaviors here
+                        default:
+                            break;
+                    }
+                });
 
-    function fisher () {
-        // For each farm it increases the amount of food it collects
+                lastUpdateTime = now; // Reset the last update time
+            }
+
+            requestAnimationFrame(loop); // Schedule next frame
+        };
+
+        loop(); // Start the loop
+    };
+
+    const addResources = (type, amount) => {
+        console.log(`Adding ${amount} of ${type}`);
+        setResources((prevResources) =>
+            prevResources.map((resource) =>
+                resource.type === type
+                    ? { ...resource, quantity: resource.quantity + amount }
+                    : resource
+            )
+        );
+    };
+
+    const handleCellClick = (rowIndex, colIndex) => {
+        const cellData = grid[rowIndex][colIndex]
+
+        if (cellData.type === 'empty') {
+            placeItem(rowIndex, colIndex)
+        } else {
+            setclickedBuilding(cellData)
+        }
     }
     //#endregion
 
+    //#region Modal
+    const openModal = () => {
+        setAvailableVillagers(villagers.filter(villager => villager.job === null)); // Filter unassigned villagers
+        setModalOpen(true);
+    };
+
+    const closeModal = () => setModalOpen(false);
+
+    const hireVillager = (villagerId) => {
+        setVillagers(prevVillagers =>
+            prevVillagers.map(villager =>
+                villager.id === villagerId ? { ...villager, job: selectedBuilding.reference } : villager
+            )
+        );
+        alert('Villager hired successfully!');
+        closeModal();
+    };
+    //#endregion
+
+    useEffect(() => {
+        return () => {
+            // Clean up on unmount
+            loopActive.current = false;
+        };
+    }, []);
+
+    //#region JSX
     return (
         <>
+            {isModalOpen && (
+            <div className="modal-overlay">
+                <div className="modal-content">
+                    <h2>Hire a Villager</h2>
+                    <ul>
+                        {availableVillagers.map(villager => (
+                            <li key={villager.id}>
+                                {villager.name} ({villager.gender})
+                                <button onClick={() => hireVillager(villager.id)}>Hire</button>
+                            </li>
+                        ))}
+                    </ul>
+                    <button onClick={closeModal} className="close-button">Close</button>
+                </div>
+            </div>
+            )}
             <div className='game-BuildingMenu'>
                 {buildingIcons.map(({reference, icon, cost}) => (
                     <div
-                      key={reference}
-                      className={`game-BuildingMenu-Icon ${selectedBuilding === reference ? 'selected' : ''}`}
-                      onClick={(event) => buildingSelecter(reference)}
-                      data-reference={`${reference}`} // Tooltip data
+                    key={reference}
+                    className={`game-BuildingMenu-Icon ${selectedBuilding === reference ? 'selected' : ''}`}
+                    onClick={(event) => buildingSelecter(reference)}
+                    data-reference={`${reference}`} // Tooltip data
                     >
                         <span>{icon}</span>
                     </div>
                 ))}
             </div>
-            <div className="grid">
-                {grid.map((row, rowIndex) =>
-                    row.map((cell, colIndex) => (
-                        <div
-                            key={`${rowIndex}-${colIndex}`}
-                            className={`cell ${cell ? 'occupied' : 'empty'}`} // Add class for styles
-                            onClick={() => placeItem(rowIndex, colIndex)} // Handle click
-                        >
-                            {buildingIcons.find(({ reference }) => reference === cell)?.icon || ''}
+            <div className="grid">                
+                {grid.map((row, rowIndex) => (
+                    <div key={`row-${rowIndex}`} className="row">
+                        {row.map((cell, colIndex) => (
+                            <div
+                                key={`${rowIndex}-${colIndex}`}
+                                className={`cell ${cell.type !== 'empty' ? 'occupied' : 'empty'}`}
+                                onClick={() => handleCellClick(rowIndex, colIndex)}
+                            >
+                                {buildingIcons.find(({ reference }) => reference === cell.type)?.icon || ''}
+                            </div>
+                        ))}
+                    </div>
+                ))}
+            </div>
+            <div className="game-SelectedBuilding">
+                {clickedBuilding && clickedBuilding.type ? (                
+                    <div className="game-SelectedBuilding-Content">
+                        <div className="game-SelectedBuilding-Content-Title">
+                            {clickedBuilding.type}
                         </div>
-                    ))
-                )}
+                        <div className="game-SelectedBuilding-Content-Buttons">
+                            <button onClick={openModal}>Hire a Villager</button>
+                        </div>
+                    </div>                
+                ) : null }
             </div>
         </>
     );
+    //#endregion
 }
 
 export default Game

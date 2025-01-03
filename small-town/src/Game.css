@@ -1,3 +1,57 @@
+/* Modal */
+.modal-overlay {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100vw;
+    height: 100vh;
+    background-color: rgba(0, 0, 0, 0.5);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    z-index: 1000;
+}
+
+.modal-content {
+    background-color: white;
+    padding: 20px;
+    border-radius: 8px;
+    width: 300px;
+    box-shadow: 0 4px 6px rgba(0, 0, 0, 0.2);
+}
+
+.modal-content h2 {
+    margin-top: 0;
+    text-align: center;
+}
+
+.modal-content ul {
+    list-style: none;
+    padding: 0;
+}
+
+.modal-content li {
+    display: flex;
+    justify-content: space-between;
+    margin: 10px 0;
+}
+
+.close-button {
+    display: block;
+    margin: 10px auto 0;
+    padding: 10px 20px;
+    background-color: #f44336;
+    color: white;
+    border: none;
+    border-radius: 5px;
+    cursor: pointer;
+}
+
+.close-button:hover {
+    background-color: #d32f2f;
+}
+
+/* Building menu group */
 .game-BuildingMenu {
     display: flex;
     overflow: hidden;
@@ -9,6 +63,7 @@
     background-color: #f9f9f9;
     border: solid 1px #ddd;
     border-radius: 8px;
+    justify-content: center;
 }
 
 .game-BuildingMenu-Icon {
@@ -60,4 +115,59 @@
 
 .game-BuildingMenu-Icon:hover::after {
     opacity: 1;
+}
+
+/* Grid group */
+/* Style the grid layout */
+.grid {
+    display: grid;
+    grid-template-columns: repeat(18, 40px); /* 10 columns, each 40px wide */
+    grid-template-rows: repeat(18, 40px); /* 10 rows, each 40px high */
+    gap: 2px; /* Space between cells */
+}
+  
+/* Style each cell */
+.cell {
+    width: 40px;
+    height: 40px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    background-color: #ddd;
+    border: 1px solid #ccc;
+    cursor: pointer;
+    font-size: 24px;
+}
+
+
+/* Selected building group */
+.game-SelectedBuilding {
+    border: solid 1px red;
+    display: flex;
+    width: 300px;
+    margin-left: 100px;
+}
+
+.game-SelectedBuilding-Content {
+    display: flex;
+    width: 300px;
+    flex-direction: column;
+}
+
+.game-SelectedBuilding-Content-Title {
+    border: solid 1px violet;
+    width: 300px;
+    height: 25px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+.game-SelectedBuilding-Content-Buttons {
+    border: solid 1px violet;
+    width: 300px;
+    height: 25px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
 }

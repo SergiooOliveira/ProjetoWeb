@@ -3,6 +3,7 @@ import Village from './Village'
 import Villager from './Villager';
 import Resources from './Resources';
 import Game from './Game';
+import Counter from './Calendar';
 import React, { useState, useEffect } from 'react';
 
 //#region TODO:
@@ -23,11 +24,10 @@ export default function App() {
   // Arrays for dinamic villagers
   const MaleNames = [ 'John', 'Mark', 'Carl' ]
   const FemaleNames = [ 'Charlotte', 'Amelia', 'Violet' ]
-  const Jobs = [ 'Lumber', 'Baker', 'Miner', 'Builder', 'Farmer', 'Hunter' ]
 
   // Grid
-  const gridSize = 10;
-  const [grid, setGrid] = useState(Array.from({ length: gridSize }, () => Array(gridSize).fill('empty')));
+  const gridSize = 18;
+  const [grid, setGrid] = useState(Array.from({ length: gridSize }, () => Array.from({ length: gridSize }, () => ({ type: 'empty' }))));
   //#endregion
 
   //#region Village functions
@@ -51,23 +51,25 @@ export default function App() {
   const createVillager = function() {
     
     let villagerGender = Math.floor(Math.random() * 2)
-    let name
+    let villagerName
 
     if (villagerGender === 0) {
       // if 0 is male
-      name = MaleNames[Math.floor(Math.random() * MaleNames.length)]
+      villagerName = MaleNames[Math.floor(Math.random() * MaleNames.length)]
+      villagerGender = 'M'
     } else if (villagerGender === 1) {
       // if 1 is female
-      name = FemaleNames[Math.floor(Math.random() * FemaleNames.length)]
+      villagerName = FemaleNames[Math.floor(Math.random() * FemaleNames.length)]
+      villagerGender = 'F'
     } else {
       console.log(villagerGender)
     }
 
     const newVillager = {
       id: villagers.length + 1,
-      name: name,
+      name: villagerName,
       yearOfBirth: 2000,
-      job: Jobs[Math.random() * (Jobs.length - 0) + 0],
+      job: null,
       gender: villagerGender,
       inventory: [],
       stats: []
@@ -90,24 +92,23 @@ export default function App() {
       id: 0,
       name: "John",
       yearOfBirth: 2000,
-      job: Jobs[Math.floor(Math.random() * (Jobs.length - 0) + 0)],
+      job: null,
       gender: 'M',
-      inventory: {
-        name: "wood",
-        quantity: 100,
-      },
-      stats: {
-        health: 100,
-        strength  : 10,
-        vigor: 20,
-      }
+      inventory: [
+        { name: "wood", quantity: 100, }
+      ],
+      stats: [
+        { health: 100, },
+        { strength  : 10, },
+        { vigor: 20, },
+      ]
     }
 
     const defaultVillager2 = {
       id: 1,
       name: "Sarah",
       yearOfBirth: 2000,
-      job: Jobs[Math.floor(Math.random() * (Jobs.length - 0) + 0)],
+      job: null,
       gender: 'F',
       inventory: {
         name: "wood",
@@ -199,16 +200,19 @@ export default function App() {
         </div>
 
         <div className='game'>
-          <Game grid={grid} setGrid={setGrid} cityResources={cityResources} setResources={setResources}/>
+          <Game grid={grid} setGrid={setGrid} cityResources={cityResources} setResources={setResources} villagers={villagers} setVillagers={setVillagers}/>          
         </div>
 
         <div className='eventList'>
+          <div className='eventList-Calendar'>
+            <Counter />
+          </div>
           <div className='eventList-ResourceControlHud'>
             <Resources cityResources={cityResources}/>
           </div>
           <button onClick={generateRandomResource}>Create Resource</button>
         </div>  
-        </div>
+      </div>
       </body>
     </main>
   );

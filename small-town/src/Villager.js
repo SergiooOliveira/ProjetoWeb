@@ -1,16 +1,18 @@
-import React from 'react';
+import React, { useState } from 'react';
 import './Villager.css';
 import VillagerCard from './VillagerCard';
 
 /*
   - Create message when new villager is added
-  - Add button to show all villagers
+  - Format the information of the villagers  
 */
 
 const Villager = ({ createVillager, villagers }) => {
 
+  const [clickedVillager, setclickedVillager] = useState(null)
+
   function liClickHandler(event, villager) {
-    console.log("Clicked: ", villager.id)
+    setclickedVillager(villager)
   }
 
   return (
@@ -33,7 +35,11 @@ const Villager = ({ createVillager, villagers }) => {
             ))}
           </ul>
           <div className='villagerListDetails'>
-
+            {clickedVillager && (
+              <div>
+                {clickedVillager.job}
+              </div>
+            )}
           </div>
         </div>
       </div>

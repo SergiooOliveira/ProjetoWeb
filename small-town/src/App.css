@@ -1,68 +1,3 @@
-.App {
-  text-align: center;
-}
-
-.App-logo {
-  height: 40vmin;
-  pointer-events: none;
-}
-
-@media (prefers-reduced-motion: no-preference) {
-  .App-logo {
-    animation: App-logo-spin infinite 20s linear;
-  }
-}
-
-.App-header {
-  background-color: #282c34;
-  min-height: 100vh;
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  justify-content: center;
-  font-size: calc(10px + 2vmin);
-  color: white;
-}
-
-.App-link {
-  color: #61dafb;
-}
-
-@keyframes App-logo-spin {
-  from {
-    transform: rotate(0deg);
-  }
-  to {
-    transform: rotate(360deg);
-  }
-}
-
-/* Style the grid layout */
-.grid {
-  display: grid;
-  grid-template-columns: repeat(10, 40px); /* 10 columns, each 40px wide */
-  grid-template-rows: repeat(10, 40px); /* 10 rows, each 40px high */
-  gap: 2px; /* Space between cells */
-}
-
-/* Style each cell */
-.cell {
-  width: 40px;
-  height: 40px;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  background-color: #ddd;
-  border: 1px solid #ccc;
-  cursor: pointer;
-  font-size: 24px;
-}
-
-/* Style cell when it has a building */
-.cell.building {
-  background-color: #8bc34a; /* Example color for buildings */
-}
-
 .content {
   display: flex;
   flex-direction: row;    
@@ -82,8 +17,10 @@
 
 .game {
   border: solid 1px blue;
+  display: flex;
   flex: 2;
   margin: 10px;
+  
 }
 
 .eventList {
@@ -93,6 +30,15 @@
 }
 
 .eventList-ResourceControlHud {
+  border: solid 1px violet;
+  height: 25px;
+  display: flex;
+  flex-direction: row;
+  justify-content: space-evenly;
+  align-items: center;
+}
+
+.eventList-Calendar {
   border: solid 1px violet;
   height: 25px;
   display: flex;

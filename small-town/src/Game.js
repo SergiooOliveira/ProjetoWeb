@@ -168,20 +168,19 @@ const Game = ({ grid, setGrid, cityResources, setResources, villagers, setVillag
     };
 
     const startGameLoop = () => {
-
-        console.log("Game Loop Started")
-
+        console.log("Starting a loop")
         loopActive.current = true;
         let lastUpdateTime = Date.now(); // Tracks the last update time
 
         const loop = () => {
+            console.log("In loop")
             if (!loopActive.current) return; // Stop the loop if inactive
 
             const now = Date.now();
             const elapsedTime = (now - lastUpdateTime) / 1000; // Time in seconds
 
-            if (elapsedTime >= 1) { // Update resources once every second
-                // Resource generation based on active buildings
+            if (elapsedTime >= 1) {                
+
                 Object.entries(buildingCount.current).forEach(([buildingType, count]) => {
                     switch (buildingType) {
                         case "Lumberjack":
@@ -195,19 +194,22 @@ const Game = ({ grid, setGrid, cityResources, setResources, villagers, setVillag
                         case "Farm":
                             addResources("food", count * 1);    // Getting 1 food/s
                             break;
-                        // Add other building behaviors here
                         default:
                             break;
                     }
                 });
 
-                lastUpdateTime = now; // Reset the last update time
+                //setResources(updatedResources); // Apply batched updates
+                
+                // console.log("City Resources after set", cityResources)
+
+                lastUpdateTime = now;
             }
 
-            requestAnimationFrame(loop); // Schedule next frame
+            requestAnimationFrame(loop); // Schedule next frame   
         };
-
-        loop(); // Start the loop
+        
+        loop()                 
     };
 
     const handleCellClick = (rowIndex, colIndex) => {
@@ -229,9 +231,14 @@ const Game = ({ grid, setGrid, cityResources, setResources, villagers, setVillag
                 resource.type === type
                     ? { ...resource, quantity: resource.quantity + amount }
                     : resource
-            )
-        );
+            ));
     };
+
+    function hasFood(resources) {
+        const food = resources.find(resource => resource.type === 'food');
+        console.log("Checking food in hasFood:", food);
+        return food && food.quantity > 0;
+    }
     //#endregion
 
 

@@ -107,7 +107,7 @@ const Game = ({ grid, setGrid, cityResources, setResources, villagers, setVillag
 
         if (canAfford(building.cost)) {
             setSelectedBuilding(building)
-            console.log(`${building.reference} selected!`)
+            //console.log(`${building.reference} selected!`)
         }
     }
 
@@ -127,6 +127,7 @@ const Game = ({ grid, setGrid, cityResources, setResources, villagers, setVillag
             return resource;
         });
         setResources(updatedResources);
+        //console.log("After deducted resources: ", cityResources)
     }
 
     const placeItem = (rowIndex, colIndex) => {
@@ -143,8 +144,8 @@ const Game = ({ grid, setGrid, cityResources, setResources, villagers, setVillag
         // Ensure resources are sufficient
         if (canAfford(selectedBuilding.cost)) {
             // Deduct resources
-            deductResources(selectedBuilding.cost);
-    
+            deductResources(selectedBuilding.cost);            
+
             // Update the grid to include the placed building
             setGrid((prevGrid) => {
                 const newGrid = [...prevGrid];
@@ -156,7 +157,7 @@ const Game = ({ grid, setGrid, cityResources, setResources, villagers, setVillag
                 }
                 return newGrid;
             });
-            console.log(`${selectedBuilding.reference} placed at [${rowIndex}, ${colIndex}]`);
+            //console.log(`${selectedBuilding.reference} placed at [${rowIndex}, ${colIndex}]`);
             
             buildingCount.current[selectedBuilding.reference] =
                 (buildingCount.current[selectedBuilding.reference] || 0) + 1;            
@@ -168,12 +169,12 @@ const Game = ({ grid, setGrid, cityResources, setResources, villagers, setVillag
     };
 
     const startGameLoop = () => {
-        console.log("Starting a loop")
+        //console.log("Starting a loop")
         loopActive.current = true;
         let lastUpdateTime = Date.now(); // Tracks the last update time
 
         const loop = () => {
-            console.log("In loop")
+            //console.log("In loop")
             if (!loopActive.current) return; // Stop the loop if inactive
 
             const now = Date.now();
@@ -199,11 +200,8 @@ const Game = ({ grid, setGrid, cityResources, setResources, villagers, setVillag
                     }
                 });
 
-                //setResources(updatedResources); // Apply batched updates
-                
-                // console.log("City Resources after set", cityResources)
+                lastUpdateTime = now;                
 
-                lastUpdateTime = now;
             }
 
             requestAnimationFrame(loop); // Schedule next frame   
@@ -225,16 +223,22 @@ const Game = ({ grid, setGrid, cityResources, setResources, villagers, setVillag
 
     //#region Resource Management
     const addResources = (type, amount) => {
-        console.log(`Adding ${amount} of ${type}`);
+        // console.log(`Adding ${amount} of ${type}`);
         setResources((prevResources) =>
             prevResources.map((resource) =>
                 resource.type === type
                     ? { ...resource, quantity: resource.quantity + amount }
                     : resource
-            ));
+        ));
     };
 
     function hasFood(resources) {
+
+        if (!resources) {
+            console.log("Resources are undefined");
+            return true
+        }
+
         const food = resources.find(resource => resource.type === 'food');
         console.log("Checking food in hasFood:", food);
         return food && food.quantity > 0;
@@ -288,6 +292,17 @@ const Game = ({ grid, setGrid, cityResources, setResources, villagers, setVillag
         closeModal();
     };
     //#endregion
+
+    useEffect(() => {
+        console.log("Updated cityResources: ", cityResources);
+
+        if (!hasFood(cityResources)) {
+            alert("Game Over")
+            loopActive.current = false
+            return
+        }
+        
+    }, [cityResources]);
 
     useEffect(() => {
         return () => {

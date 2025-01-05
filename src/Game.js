@@ -421,7 +421,8 @@ const Game = ({ grid, setGrid, cityResources, setResources, villagers, setVillag
             return
         }
 
-        if (winCon(cityResources)) {            
+        if (winCon(cityResources)) {
+            alert("Won")
             loopActive.current = false
             return
         }

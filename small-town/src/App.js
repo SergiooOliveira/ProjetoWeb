@@ -72,7 +72,6 @@ export default function App() {
       job: null,
       gender: villagerGender,
       inventory: [],
-      stats: []
     }
 
     console.log("Created new Villager")
@@ -95,14 +94,7 @@ export default function App() {
         yearOfBirth: 2000,
         job: null,
         gender: 'M',
-        inventory: [
-          { name: "wood", quantity: 100, }
-        ],
-        stats: [
-          { type: "health", value: 100, },
-          { type: "strength", value: 10, },
-          { type: "vigor", value: 20, },
-        ]
+        inventory: [],        
       },
       {
       id: 1,
@@ -110,14 +102,7 @@ export default function App() {
       yearOfBirth: 2000,
       job: null,
       gender: 'F',
-      inventory: [
-        { name: "wood", quantity: 100, }
-      ],
-      stats: [
-        { type: "health", value: 100, },
-        { type: "strength", value: 10, },
-        { type: "vigor", value: 20, },
-      ]
+      inventory: [],
     }]
 
     setVillagers(defaultVillagers)    
@@ -194,7 +179,7 @@ export default function App() {
       <body>
       <div className='content'>        
         <div className='villagerListApp'>
-          <Villager createVillager={createVillager} villagers={villagers}/>
+          <Villager createVillager={createVillager} villagers={villagers} setVillagers={setVillagers} cityResources={cityResources} setResources={setResources}/>
         </div>
 
         <div className='game'>

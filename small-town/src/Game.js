@@ -203,7 +203,7 @@ const Game = ({ grid, setGrid, cityResources, setResources, villagers, setVillag
                         if (v.job) workers.push(v)
                     })
 
-                    console.log("Workers: ", workers)
+                    // console.log("Workers: ", workers)
 
                     if (workers.length > 0) {
 
@@ -275,16 +275,16 @@ const Game = ({ grid, setGrid, cityResources, setResources, villagers, setVillag
     }
 
     const findGems = (workers) => {
-        console.log("Trying to find some gems")
+        // console.log("Trying to find some gems")
 
         const gemChance = 0.9;
 
         workers.forEach((worker) => {
             if (worker.job === 'Miner') {
-                console.log(`${worker.name} attempting to find a gem`)
+                // console.log(`${worker.name} attempting to find a gem`)
 
                 if (Math.random() < gemChance) {
-                    console.log(`${worker.name} found a gem`)
+                    // console.log(`${worker.name} found a gem`)
 
                     const villagerIndex = villagersRef.current.findIndex(v => v.id === worker.id)
                     if (villagerIndex !== -1) {
@@ -298,13 +298,26 @@ const Game = ({ grid, setGrid, cityResources, setResources, villagers, setVillag
                             villager.inventory.push({ name: "gem", quantity: 1 })
                         }
                     }
-                } else console.log(`${worker.name} did not find a gem`)
+                } // else console.log(`${worker.name} did not find a gem`)
             }
         })
 
         // Only update villagers if we've made changes
         setVillagers([...villagersRef.current])
     };
+
+    function winCon (resources) {
+
+        if (!resources) {
+            //console.log("Resources are undefined");
+            return false
+        }
+
+        const gold = resources.find(resource => resource.type === 'gold');
+        console.log("Checking gold in winCon:", gold.quantity);
+        // console.log(gold && gold.quantity >= 500);
+        return gold && gold.quantity >= 5000;
+    }
     //#endregion
 
 
@@ -373,6 +386,12 @@ const Game = ({ grid, setGrid, cityResources, setResources, villagers, setVillag
 
         if (!hasFood(cityResources)) {
             alert("Game Over")
+            loopActive.current = false
+            return
+        }
+
+        if (winCon(cityResources)) {
+            alert("Won")
             loopActive.current = false
             return
         }

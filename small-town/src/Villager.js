@@ -1,19 +1,38 @@
-import React, { useState } from 'react';
+import React, { useState, useRef } from 'react';
 import './Villager.css';
-import VillagerCard from './VillagerCard';
+import Resources from './Resources';
 
 /*
   - Create message when new villager is added
   - Format the information of the villagers  
 */
 
-const Villager = ({ createVillager, villagers }) => {
+const Villager = ({ createVillager, villagers, setVillagers, cityResources, setResources }) => {
 
-  const [clickedVillager, setclickedVillager] = useState(null)
+  const [clickedVillager, setClickedVillager] = useState(null)
+  const villagersRef = useRef(villagers)
+  const cityResourcesRef = useRef(cityResources)
 
   function liClickHandler(event, villager) {
-    setclickedVillager(villager)
+    setClickedVillager(villager)
   }
+
+  // Function to handle selling all gems
+  const handleSellAllGems = (villager, itemName) => {
+    console.log(`Trying to sell ${itemName} form ${villager.name}`)
+
+    const itemIndex = villager.inventory.findIndex(item => item.name === itemName)
+    const goldEarned = villager.inventory[itemIndex].quantity * 10 // Each gem is worth 10 gold
+
+    villager.inventory[itemIndex].quantity = 0
+    
+    setResources((prevResources) => 
+      prevResources.map((resource) =>
+        resource.type === 'gold'
+          ? { ...resource, quantity: resource.quantity + goldEarned}
+          : resource
+    ))
+  };
 
   return (
     <>
@@ -48,6 +67,11 @@ const Villager = ({ createVillager, villagers }) => {
                     {clickedVillager?.inventory?.map((item) => (
                       <li key={item.id}>
                         {item.name} {item.quantity}
+                        {item.name === 'gem' && (
+                          <button onClick={() => handleSellAllGems(clickedVillager, item.name)}>
+                            Sell All Gems
+                          </button>
+                        )}
                       </li>
                     ))}
                   </ul>

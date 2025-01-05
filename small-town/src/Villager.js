@@ -34,8 +34,7 @@ const Villager = ({ createVillager, villagers, setResources }) => {
   return (
     <>
       <div className='villagerListTitle'>
-        <h1>Villagers</h1>
-        <button onClick={createVillager}>Create Villager</button>
+        <h1>Villagers</h1>        
       </div>
       <div>
         <div className='villagerListGroup'>
@@ -45,7 +44,7 @@ const Villager = ({ createVillager, villagers, setResources }) => {
                 key={villager.id}
                 onClick={(event) => liClickHandler(event, villager)}
               >
-                <img></img>
+                {/* <img></img> */}
                 <span>{villager.name}</span>
               </li>
             ))}
@@ -60,9 +59,9 @@ const Villager = ({ createVillager, villagers, setResources }) => {
                   {clickedVillager.job || "Unemployed"}
                 </div>
                 <div className='villagerListDetails-Inventory'>
-                  <ul>
+                  <ul className='villagerListDetails-Inventory-Inventory-List'>
                     {clickedVillager?.inventory?.map((item) => (
-                      <li key={item.id}>
+                      <li className='villagerListDetails-Inventory-Inventory-Item' key={item.id}>
                         {item.name} {item.quantity}
                         {item.name === 'gem' && (
                           <button onClick={() => handleSellAllGems(clickedVillager, item.name)}>

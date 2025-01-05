@@ -19,7 +19,7 @@ const Village = ({ village }) => {
             </div>
 
             <div className='title'>
-                <h3>Teste de posição</h3>
+                <h3>Small Town</h3>
             </div>
             
             <div className='contacts'>

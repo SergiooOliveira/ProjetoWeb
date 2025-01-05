@@ -1,0 +1,207 @@
+/* Modal */
+.modal-overlay {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100vw;
+    height: 100vh;
+    background-color: rgba(0, 0, 0, 0.5);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    z-index: 1000;
+}
+
+.modal-content {
+    background-color: white;
+    padding: 20px;
+    border-radius: 8px;
+    width: 300px;
+    box-shadow: 0 4px 6px rgba(0, 0, 0, 0.2);
+}
+
+.modal-content h2 {
+    margin-top: 0;
+    text-align: center;
+}
+
+.modal-content ul {
+    list-style: none;
+    padding: 0;
+}
+
+.modal-content li {
+    display: flex;
+    justify-content: space-between;
+    margin: 10px 0;
+}
+
+.close-button {
+    display: block;
+    margin: 10px auto 0;
+    padding: 10px 20px;
+    background-color: #f44336;
+    color: white;
+    border: none;
+    border-radius: 5px;
+    cursor: pointer;
+}
+
+.close-button:hover {
+    background-color: #d32f2f;
+}
+
+/* Building menu group */
+.game-BuildingMenu {
+    display: flex;
+    overflow: hidden;
+    position: relative;
+    flex-wrap: wrap;
+    flex-direction: column;
+    gap: 5px;
+    padding: 10px;
+    background-color: #f9f9f9;
+    /* border: solid 1px #ddd; */
+    border-radius: 8px;
+    justify-content: center;
+}
+
+.game-BuildingMenu-Icon {
+    position: relative;
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    width: 60px;
+    height: 60px;
+    margin: 5px;
+    font-size: 24px;
+    border: solid 2px transparent;
+    border-radius: 8px;
+    background-color: #f4f4f4;
+    transition: transform 0.2s, background-color 0.2s, border-color 0.2s;
+    cursor: pointer;
+}
+
+.game-BuildingMenu-Icon:hover {
+    background-color: #e0e0e0;
+    border-color: #ddd;
+    transform: scale(1.1);
+}
+
+.game-BuildingMenu-Icon.selected {
+    border-color: #f0c040;
+    background-color: #ddeaa7;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
+    transform: scale(1.15);
+}
+
+.game-BuildingMenu-Icon:hover::after {
+    content: attr(data-reference);
+    position: absolute;
+    top: -35px;
+    left: 50%;
+    transform: translateX(-50%);
+    background-color: #333;
+    color: #fff;
+    padding: 5px 10px;
+    border-radius: 4px;
+    font-size: 12px;
+    white-space: nowrap;
+    pointer-events: none;
+    opacity: 0;
+    transition: opacity 0.2s;
+    z-index: 10;
+}
+
+.game-BuildingMenu-Icon:hover::after {
+    opacity: 1;
+}
+
+/* Grid group */
+/* Style the grid layout */
+.grid {
+    display: grid;
+    grid-template-columns: repeat(18, 40px); /* 10 columns, each 40px wide */
+    grid-template-rows: repeat(18, 40px); /* 10 rows, each 40px high */
+    gap: 2px; /* Space between cells */
+}
+  
+/* Style each cell */
+.cell {
+    width: 40px;
+    height: 40px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    background-color: #ddd;
+    border: 1px solid #ccc;
+    cursor: pointer;
+    font-size: 24px;
+}
+
+
+/* Selected building group */
+.game-SelectedBuilding {
+    /* border: solid 1px red; */
+    background-color: #ccc;
+    display: flex;
+    width: 300px;
+    margin-left: 100px;
+    flex-direction: column;
+}
+
+.game-SelectedBuilding-Content {
+    display: flex;
+    width: 100%;
+    flex-direction: column;
+}
+
+.game-SelectedBuilding-Content-Title {
+    /* border: solid 1px violet; */
+    width: 100%;
+    height: 25px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+.game-SelectedBuilding-Content-Buttons {
+    /* border: solid 1px violet; */
+    width: 100%;
+    height: 25px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+.game-SelectedBuilding-Content-Workers {
+    /* border: solid 1px violet; */
+    width: 100%;
+    display: flex;
+    flex-direction: column;
+    align-items: left;
+    margin-top: 20px;
+}
+
+.game-SelectedBuilding-Content-Workers h3 {
+    font-size: 18px;
+    color: #333;
+    text-align: left;
+    margin-left: 10px;
+}
+
+.game-SelectedBuilding-Content-Workers ul {
+    list-style-type: none;
+    padding: 0;
+    margin: 10px 0 0;
+    text-align: left;
+    width: 100%;
+}
+
+.game-SelectedBuilding-Content-Workers ul li {
+    font-size: 16px;
+    margin-top: 5px;
+    margin-left: 10px;
+    color: #555;
+    text-align: left;
+}

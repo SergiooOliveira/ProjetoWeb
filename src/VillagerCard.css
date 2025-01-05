@@ -1,0 +1,50 @@
+.villagerList {
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: space-evenly;
+    gap: 10px;
+}
+
+.card {
+    width: 200px;
+    min-height: 150px;
+    background-color: #fff;
+    border-radius: 8px;
+    box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+    margin: 10px;
+    display: flex;
+    flex-direction: column;
+}
+
+.card-details {
+    background-color: #4CAF50;
+    color: white;
+    text-align: center;
+    padding: 5px;
+    font-size: 14px;
+    font-weight: bold;
+}
+
+.card img {
+    border: 8px;
+}
+
+.card-details .more-options {
+    float: right;
+    font-size: 16px;
+    cursor: pointer;
+}
+
+.hidden {
+    display: none;
+}
+
+.card-expanded {
+    color: black;
+    padding: 10px;
+    font-size: 12px;
+}
+
+.content {
+    overflow-y: auto;
+}

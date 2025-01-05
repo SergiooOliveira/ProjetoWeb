@@ -1,6 +1,6 @@
 import React from 'react';
   
-const Resources = ({ cityResources }) => {
+const Resources = ({ cityResources, maxResources }) => {
   
     const resourceIcons = {
         gold: '🪙',
@@ -17,7 +17,7 @@ const Resources = ({ cityResources }) => {
                 className={`eventList-ResourceControlHud-${resource.type.charAt(0).toUpperCase() + resource.type.slice(1)}`}
             >
                 <span>
-                {resourceIcons[resource.type]}: {resource.quantity}
+                {resourceIcons[resource.type]}: {resource.quantity}/{maxResources}
                 </span>
             </div>
         ))}

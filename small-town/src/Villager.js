@@ -6,7 +6,7 @@ import './Villager.css';
   - Format the information of the villagers  
 */
 
-const Villager = ({ createVillager, villagers, cityResources, setResources }) => {
+const Villager = ({ createVillager, villagers, setResources }) => {
 
   const [clickedVillager, setClickedVillager] = useState(null)
 

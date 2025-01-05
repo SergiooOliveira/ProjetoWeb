@@ -4,7 +4,7 @@ import Villager from './Villager';
 import Resources from './Resources';
 import Game from './Game';
 import Counter from './Calendar';
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect, useRef } from 'react';
 
 //#region TODO:
 /*
@@ -20,6 +20,9 @@ export default function App() {
   const [village, setVillage] = useState(null)
   const [villagers, setVillagers] = useState([]);
   const [cityResources, setResources] = useState(null)
+  const [maxResources, setMaxResources] = useState()
+  const maxResourcesByLevel = 1000
+  const villagersRef = useRef(villagers)
 
   // Arrays for dinamic villagers
   const MaleNames = [ 'John', 'Mark', 'Carl' ]
@@ -76,17 +79,16 @@ export default function App() {
 
     console.log("Created new Villager", newVillager)
 
-    setVillagers((prevVillagers) => [...prevVillagers, newVillager])
+    setVillagers((prevVillagers) => {
+      const updatedVillagers = [...prevVillagers, newVillager]
+      villagersRef.current = updatedVillagers
+      return updatedVillagers
+    })
+
     setVillage((prevVillage) => ({
       ...prevVillage,
       villagePopulation: prevVillage.villagePopulation + 1
     }))
-
-    // setVillagers([...villagers, newVillager]);
-    // setVillage((prevVillage) => ({
-    //   ...prevVillage,
-    //   villagePopulation: villagers.length + 1
-    // }))
   };
 
   const testData = function() {
@@ -117,6 +119,7 @@ export default function App() {
     }))
 
   }
+
   //#endregion
 
   //#region Resources functions
@@ -171,6 +174,7 @@ export default function App() {
     createVillage(2);
     testData();
     resourceInitializer();
+    setMaxResources(maxResourcesByLevel)
   }, []);
 
   // JSX elements
@@ -181,13 +185,26 @@ export default function App() {
       </header>
 
       <body>
-      <div className='content'>        
+      <div className='content'>
         <div className='villagerListApp'>
-          <Villager createVillager={createVillager} villagers={villagers} cityResources={cityResources} setResources={setResources}/>
+          <Villager createVillager={createVillager} villagers={villagers} setResources={setResources}/>
         </div>
 
         <div className='game'>
-          <Game grid={grid} setGrid={setGrid} cityResources={cityResources} setResources={setResources} villagers={villagers} setVillagers={setVillagers} setVillage={setVillage} createVillager={createVillager}/>          
+          <Game 
+            grid={grid}
+            setGrid={setGrid}
+            cityResources={cityResources}
+            setResources={setResources}
+            villagers={villagers}
+            setVillagers={setVillagers}
+            setVillage={setVillage}
+            createVillager={createVillager}
+            maxResources={maxResources}
+            setMaxResources={setMaxResources}
+            maxResourcesByLevel={maxResourcesByLevel}
+            villagersRef={villagersRef}
+          />          
         </div>
 
         <div className='eventList'>
@@ -195,7 +212,7 @@ export default function App() {
             <Counter />
           </div>
           <div className='eventList-ResourceControlHud'>
-            <Resources cityResources={cityResources}/>
+            <Resources cityResources={cityResources} maxResources={maxResources}/>
           </div>
           {/*<button onClick={generateRandomResource}>Create Resource</button>*/}
           <div className='eventList-Listing'>

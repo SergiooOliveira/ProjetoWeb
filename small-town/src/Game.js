@@ -13,33 +13,33 @@ import './Game.css'
 */
 //#endregion
 
-const Game = ({ grid, setGrid, cityResources, setResources, villagers, setVillagers, setVillage, createVillager }) => {
+const Game = ({ grid, setGrid, cityResources, setResources, villagers, setVillagers, setVillage, createVillager, maxResources, setMaxResources, maxResourcesByLevel, villagersRef }) => {
 
     //#region Variables
     // State for Selected building
     const [selectedBuilding, setSelectedBuilding] = useState(null)
     const [clickedBuilding, setclickedBuilding] = useState({})
     const loopActive = useRef(false); // Indicates if the game loop is running
+    const [townHallPlaced, setTownHallPlaced] = useState(false);
 
     // Tracks the number of each building type
-    // 'maxWorks' can change depending on upgrades
     const buildingCount = useRef({});
 
     // Hire Vilaggers modal
     const [isModalOpen, setModalOpen] = useState(false); // Modal toggle
     const [availableVillagers, setAvailableVillagers] = useState([]); // Villagers to display
-    const villagersRef = useRef(villagers)
 
     //#endregion
 
     //#region Building Icons
-    const buildingIcons = [
+    const [buildingIcons, setBuildingIcons] = useState ([
         { reference: "Town Hall", icon: '🏛️',
             cost: [
                 {type: 'gold', quantity: 10},
                 {type: 'wood', quantity: 10},
                 {type: 'stone', quantity: 10},
-            ]
+            ],
+            level: 1
         },
         { reference: "House", icon: '🏠',
             cost: [
@@ -75,7 +75,7 @@ const Game = ({ grid, setGrid, cityResources, setResources, villagers, setVillag
             resourceGainPerWorker: 2,
             foodConsumptionPerWorker: 1         
         },        
-    ];
+    ]);
     //#endregion
 
     //#region Functions
@@ -119,10 +119,21 @@ const Game = ({ grid, setGrid, cityResources, setResources, villagers, setVillag
             return;
         }
     
+        // Only 1 town Hall allowed
+        if (selectedBuilding.reference === 'Town Hall') {
+            if (townHallPlaced) {
+                // console.log("You can only place one Town Hall!");
+                return;
+            }      
+                // console.log("Placing Town Hall...");
+                setTownHallPlaced(true); // Update the state to true
+        } // else console.log(`Placing ${selectedBuilding.reference}`);
+        
         // Ensure resources are sufficient
-        if (canAfford(selectedBuilding.cost)) {
+        if (canAfford(selectedBuilding.cost)) {        
+
             // Deduct resources
-            deductResources(selectedBuilding.cost);            
+            deductResources(selectedBuilding.cost);
 
             // Update the grid to include the placed building
             setGrid((prevGrid) => {
@@ -145,6 +156,8 @@ const Game = ({ grid, setGrid, cityResources, setResources, villagers, setVillag
                 }))
                 createVillager(villagers.length + 1)
                 createVillager(villagers.length + 2)
+                
+                
             }
 
             buildingCount.current[selectedBuilding.reference] = (buildingCount.current[selectedBuilding.reference] || 0) + 1;
@@ -173,13 +186,12 @@ const Game = ({ grid, setGrid, cityResources, setResources, villagers, setVillag
                     const building = buildingIcons.find(b => b.reference === buildingType)
                     if (!building) return
 
+                    //console.log("villagersRef.current: ", villagersRef.current)
                     let workers = []
 
                     villagersRef.current.forEach((v) => {
                         if (v.job) workers.push(v)
                     })
-
-                    // console.log("Workers: ", workers)
 
                     if (workers.length > 0) {
 
@@ -223,17 +235,63 @@ const Game = ({ grid, setGrid, cityResources, setResources, villagers, setVillag
             setclickedBuilding(cellData)
         }
     }
+
+    function upgradeLevel() {
+        const updatedBuildingIcons = [...buildingIcons]
+        const townHall = updatedBuildingIcons.find(building => building.reference === 'Town Hall')
+
+        if (!townHall) {
+            console.log("Town Hall not found")
+            return
+        }
+
+        const upgradeCost = [
+            { type: 'gold', quantity: maxResources},
+            { type: 'wood', quantity: maxResources},
+            { type: 'stone', quantity: maxResources},
+        ]
+
+        if (canAfford(upgradeCost)) {
+            console.log("Can afford")
+            
+            deductResources(upgradeCost)
+            
+            townHall.level += 1
+            
+            setMaxResources(townHall.level * maxResourcesByLevel)
+            setBuildingIcons(updatedBuildingIcons)
+
+        } else console.log("Can't afford")
+    }
     //#endregion
 
     //#region Resource Management
     const addResources = (type, amount) => {
-        // console.log(`Adding ${amount} of ${type}`);
-        setResources((prevResources) =>
-            prevResources.map((resource) =>
-                resource.type === type
-                    ? { ...resource, quantity: resource.quantity + amount }
-                    : resource
-        ));
+        
+        // Find the current value of maxResources, capped by the town hall level
+        const maxResource = maxResources || maxResourcesByLevel * buildingIcons.find(b => b.reference === 'Town Hall').level;
+
+        setResources((prevResources) => 
+            prevResources.map((resource) => {
+                if (resource.type === type) {
+                    const newQuantity = resource.quantity + amount
+
+                    return {
+                        ...resource,
+                        quantity: Math.min(newQuantity, maxResource)
+                    }
+                }
+                return resource
+            })
+        )
+
+        // // console.log(`Adding ${amount} of ${type}`);
+        // setResources((prevResources) =>
+        //     prevResources.map((resource) =>
+        //         resource.type === type
+        //             ? { ...resource, quantity: resource.quantity + amount }
+        //             : resource
+        // ));
     };
 
     function hasFood(resources) {
@@ -278,6 +336,7 @@ const Game = ({ grid, setGrid, cityResources, setResources, villagers, setVillag
 
         // Only update villagers if we've made changes
         setVillagers([...villagersRef.current])
+        // console.log("Find gems villagers: ", villagersRef.current)
     };
 
     function winCon (resources) {
@@ -346,8 +405,6 @@ const Game = ({ grid, setGrid, cityResources, setResources, villagers, setVillag
                 return newGrid
             })
         } else console.error("Building coordinates are missing")
-
-        
 
         alert(`Villager ${villagerId} Hired`)
         closeModal();
@@ -431,7 +488,7 @@ const Game = ({ grid, setGrid, cityResources, setResources, villagers, setVillag
                         <div className="game-SelectedBuilding-Content-Title">
                             {clickedBuilding.type}
                         </div>
-                        {clickedBuilding.type !== 'House' ? (
+                        {clickedBuilding.type !== 'House' && clickedBuilding.type !== 'Town Hall' ? (
                             <>
                                 <div className="game-SelectedBuilding-Content-Buttons">
                                     <button onClick={openModal}>Hire a Villager</button>
@@ -450,6 +507,12 @@ const Game = ({ grid, setGrid, cityResources, setResources, villagers, setVillag
                                     )}
                                 </div>
                             </>
+                        ) : clickedBuilding.type === 'Town Hall' ? (
+                            <div className='game-SelectedBuilding-Content-TownHall'>
+                                <span> - Level {buildingIcons.find(b => b.reference === 'Town Hall').level}</span>
+                                <button onClick={upgradeLevel}>Upgrade level</button>
+                                <p>Cost {maxResources}</p>
+                            </div>
                         ) : (
                             <p>+2 Villagers</p>
                         )}

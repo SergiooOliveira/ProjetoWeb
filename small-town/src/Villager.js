@@ -1,17 +1,14 @@
-import React, { useState, useRef } from 'react';
+import React, { useState } from 'react';
 import './Villager.css';
-import Resources from './Resources';
 
 /*
   - Create message when new villager is added
   - Format the information of the villagers  
 */
 
-const Villager = ({ createVillager, villagers, setVillagers, cityResources, setResources }) => {
+const Villager = ({ createVillager, villagers, setResources }) => {
 
   const [clickedVillager, setClickedVillager] = useState(null)
-  const villagersRef = useRef(villagers)
-  const cityResourcesRef = useRef(cityResources)
 
   function liClickHandler(event, villager) {
     setClickedVillager(villager)

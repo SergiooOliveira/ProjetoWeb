@@ -19,7 +19,7 @@ export default function App() {
   // useState
   const [village, setVillage] = useState(null)
   const [villagers, setVillagers] = useState([]);
-  const [cityResources, setResources] = useState([])
+  const [cityResources, setResources] = useState(null)
 
   // Arrays for dinamic villagers
   const MaleNames = [ 'John', 'Mark', 'Carl' ]
@@ -72,7 +72,6 @@ export default function App() {
       job: null,
       gender: villagerGender,
       inventory: [],
-      stats: []
     }
 
     console.log("Created new Villager")
@@ -88,41 +87,25 @@ export default function App() {
   };
 
   const testData = function() {
-    const defaultVillager1 = {
-      id: 0,
-      name: "John",
-      yearOfBirth: 2000,
-      job: null,
-      gender: 'M',
-      inventory: [
-        { name: "wood", quantity: 100, }
-      ],
-      stats: [
-        { health: 100, },
-        { strength  : 10, },
-        { vigor: 20, },
-      ]
-    }
-
-    const defaultVillager2 = {
+    const defaultVillagers = [
+      {
+        id: 0,
+        name: "John",
+        yearOfBirth: 2000,
+        job: null,
+        gender: 'M',
+        inventory: [],        
+      },
+      {
       id: 1,
       name: "Sarah",
       yearOfBirth: 2000,
       job: null,
       gender: 'F',
-      inventory: {
-        name: "wood",
-        quantity: 100,
-      },
-      stats: {
-        health: 100,
-        strength: 10,
-        vigor: 20,
-      }
-    }
+      inventory: [],
+    }]
 
-    setVillagers(defaultVillager1)
-    setVillagers([...villagers, defaultVillager2])
+    setVillagers(defaultVillagers)    
     
     setVillage((prevVillage) => ({
       ...prevVillage,
@@ -196,7 +179,7 @@ export default function App() {
       <body>
       <div className='content'>        
         <div className='villagerListApp'>
-          <Villager createVillager={createVillager} villagers={villagers}/>
+          <Villager createVillager={createVillager} villagers={villagers} setVillagers={setVillagers} cityResources={cityResources} setResources={setResources}/>
         </div>
 
         <div className='game'>
@@ -210,7 +193,10 @@ export default function App() {
           <div className='eventList-ResourceControlHud'>
             <Resources cityResources={cityResources}/>
           </div>
-          <button onClick={generateRandomResource}>Create Resource</button>
+          {/*<button onClick={generateRandomResource}>Create Resource</button>*/}
+          <div className='eventList-Listing'>
+            
+          </div>
         </div>  
       </div>
       </body>

@@ -42,4 +42,41 @@ body {
 .villagerListDetails {
     border: solid 1px blue;
     flex: 1;
+    display: flex;
+    flex-direction: column;
+    justify-content: flex-start;
+    align-items: flex-start;
+}
+
+.villagerListDetails-Name {
+    align-self: center;
+    margin-top: -10px;
+}
+
+.villagerListDetails-Job {
+    margin-left: 10px;
+}
+
+.villagerListDetails-Inventory {
+    width: 100%;
+    display: flex;
+    flex-direction: column;
+    align-items: left;
+    margin-top: 20px;
+}
+
+.villagerListDetails-Inventory ul {
+    list-style-type: none; /* Removes bullets from list */
+    padding: 0;
+    margin: 10px 0 0; /* Adds spacing between h3 and list */
+    text-align: left; /* Ensures text is aligned to the center */
+    width: 100%;
+}
+
+.villagerListDetails-Inventory ul li {
+    font-size: 16px;
+    margin-top: 5px;
+    margin-left: 10px;
+    color: #555; /* Subtle text color */
+    text-align: left;
 }

@@ -11,7 +11,7 @@ const Resources = ({ cityResources }) => {
     
     return (
     <>
-        {cityResources.map((resource, index) => (
+        {cityResources && cityResources.map((resource, index) => (
             <div
                 key={index}
                 className={`eventList-ResourceControlHud-${resource.type.charAt(0).toUpperCase() + resource.type.slice(1)}`}

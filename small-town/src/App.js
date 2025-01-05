@@ -48,7 +48,7 @@ export default function App() {
 
   //#region Villager functions
   // Function to create a new Villager
-  const createVillager = function() {
+  const createVillager = function(customID) {
     
     let villagerGender = Math.floor(Math.random() * 2)
     let villagerName
@@ -66,7 +66,7 @@ export default function App() {
     }
 
     const newVillager = {
-      id: villagers.length + 1,
+      id: customID || villagers.length + 1,
       name: villagerName,
       yearOfBirth: 2000,
       job: null,
@@ -74,16 +74,19 @@ export default function App() {
       inventory: [],
     }
 
-    console.log("Created new Villager")
+    console.log("Created new Villager", newVillager)
 
-    if (villagers.length < village.villagePopulationLimit) {
-      setVillagers([...villagers, newVillager]);
-      setVillage((prevVillage) => ({
-        ...prevVillage,
-        villagePopulation: villagers.length + 1
-      }))
-    } else
-      console.log("Limit reached")
+    setVillagers((prevVillagers) => [...prevVillagers, newVillager])
+    setVillage((prevVillage) => ({
+      ...prevVillage,
+      villagePopulation: prevVillage.villagePopulation + 1
+    }))
+
+    // setVillagers([...villagers, newVillager]);
+    // setVillage((prevVillage) => ({
+    //   ...prevVillage,
+    //   villagePopulation: villagers.length + 1
+    // }))
   };
 
   const testData = function() {
@@ -97,19 +100,20 @@ export default function App() {
         inventory: [],        
       },
       {
-      id: 1,
-      name: "Sarah",
-      yearOfBirth: 2000,
-      job: null,
-      gender: 'F',
-      inventory: [],
-    }]
+        id: 1,
+        name: "Sarah",
+        yearOfBirth: 2000,
+        job: null,
+        gender: 'F',
+        inventory: [],
+      }
+    ]
 
     setVillagers(defaultVillagers)    
     
     setVillage((prevVillage) => ({
       ...prevVillage,
-      villagePopulation: villagers.length + 1
+      villagePopulation: villagers.length + 2
     }))
 
   }
@@ -130,41 +134,41 @@ export default function App() {
     setResources(resources)
   }
 
-  const generateRandomResource = function () {
-    let type = Math.floor(Math.random() * 4)
-    let quantity = Math.floor(Math.random() * 100)
+  // const generateRandomResource = function () {
+  //   let type = Math.floor(Math.random() * 4)
+  //   let quantity = Math.floor(Math.random() * 100)
 
-    const resources = [ 'gold', 'food', 'wood', 'stone' ]
+  //   const resources = [ 'gold', 'food', 'wood', 'stone' ]
 
-    createResources(resources[type], quantity)
-  }
+  //   createResources(resources[type], quantity)
+  // }
 
-  // Function to manage resources
-  const createResources = function (type, quantity) {
-    // Find the resource matching the specified type
-    const resourceIndex = cityResources.findIndex(resource => resource.type === type);
+  // // Function to manage resources
+  // const createResources = function (type, quantity) {
+  //   // Find the resource matching the specified type
+  //   const resourceIndex = cityResources.findIndex(resource => resource.type === type);
   
-    if (resourceIndex !== -1) {
-      // Copy the current resources array
-      const updatedResources = [...cityResources];
+  //   if (resourceIndex !== -1) {
+  //     // Copy the current resources array
+  //     const updatedResources = [...cityResources];
   
-      // Update the quantity of the matching resource
-      updatedResources[resourceIndex] = {
-        ...updatedResources[resourceIndex],
-        quantity: updatedResources[resourceIndex].quantity + quantity,
-      };
+  //     // Update the quantity of the matching resource
+  //     updatedResources[resourceIndex] = {
+  //       ...updatedResources[resourceIndex],
+  //       quantity: updatedResources[resourceIndex].quantity + quantity,
+  //     };
   
-      // Set the updated resources array
-      setResources(updatedResources);
-    } else {
-      console.error(`Resource of type "${type}" not found.`);
-    }
-  };
+  //     // Set the updated resources array
+  //     setResources(updatedResources);
+  //   } else {
+  //     console.error(`Resource of type "${type}" not found.`);
+  //   }
+  // };
   //#endregion
 
   // Call createVillage when the component mounts
   useEffect(() => {
-    createVillage(20);
+    createVillage(2);
     testData();
     resourceInitializer();
   }, []);
@@ -179,11 +183,11 @@ export default function App() {
       <body>
       <div className='content'>        
         <div className='villagerListApp'>
-          <Villager createVillager={createVillager} villagers={villagers} setVillagers={setVillagers} cityResources={cityResources} setResources={setResources}/>
+          <Villager createVillager={createVillager} villagers={villagers} cityResources={cityResources} setResources={setResources}/>
         </div>
 
         <div className='game'>
-          <Game grid={grid} setGrid={setGrid} cityResources={cityResources} setResources={setResources} villagers={villagers} setVillagers={setVillagers}/>          
+          <Game grid={grid} setGrid={setGrid} cityResources={cityResources} setResources={setResources} villagers={villagers} setVillagers={setVillagers} setVillage={setVillage} createVillager={createVillager}/>          
         </div>
 
         <div className='eventList'>

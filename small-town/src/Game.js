@@ -13,7 +13,7 @@ import './Game.css'
 */
 //#endregion
 
-const Game = ({ grid, setGrid, cityResources, setResources, villagers, setVillagers }) => {
+const Game = ({ grid, setGrid, cityResources, setResources, villagers, setVillagers, setVillage, createVillager }) => {
 
     //#region Variables
     // State for Selected building
@@ -89,25 +89,7 @@ const Game = ({ grid, setGrid, cityResources, setResources, villagers, setVillag
             ]  ,
             resourceGainPerWorker: 2,
             foodConsumptionPerWorker: 1         
-        },
-        { reference: "Hunter", icon: '⚔️',
-            cost: [
-                {type: 'gold', quantity: 5},
-                {type: 'wood', quantity: 10},
-                {type: 'stone', quantity: 5},
-            ],
-            resourceGainPerWorker: 2,
-            foodConsumptionPerWorker: 1
-        },
-        { reference: "Fisher", icon: '🎣',            
-            cost: [
-                {type: 'gold', quantity: 5},
-                {type: 'wood', quantity: 10},
-                {type: 'stone', quantity: 5},
-            ],
-            resourceGainPerWorker: 2,
-            foodConsumptionPerWorker: 1
-        },
+        },        
     ];
     //#endregion
 
@@ -170,8 +152,17 @@ const Game = ({ grid, setGrid, cityResources, setResources, villagers, setVillag
             });
             //console.log(`${selectedBuilding.reference} placed at [${rowIndex}, ${colIndex}]`);
             
-            buildingCount.current[selectedBuilding.reference] =
-                (buildingCount.current[selectedBuilding.reference] || 0) + 1;            
+            if (selectedBuilding.reference === 'House') {
+                // console.log("Placed a house")
+                setVillage((prevVillage) => ({
+                    ...prevVillage,
+                    villagePopulationLimit: prevVillage.villagePopulationLimit + 2
+                }))
+                createVillager(villagers.length + 1)
+                createVillager(villagers.length + 2)
+            }
+
+            buildingCount.current[selectedBuilding.reference] = (buildingCount.current[selectedBuilding.reference] || 0) + 1;
             if (!loopActive.current) startGameLoop(); // Ensure game loop is running
 
         } else {
@@ -219,8 +210,6 @@ const Game = ({ grid, setGrid, cityResources, setResources, villagers, setVillag
                                 addResources("food", workers.length * -building.foodConsumptionPerWorker);     // Consuming food/s
                                 break;
                             case "Farm": 
-                            case "Hunter": 
-                            case "Fisher":
                                 addResources("food", workers.length * building.resourceGainPerWorker);         // Getting stone/s
                                 addResources("food", workers.length * -building.foodConsumptionPerWorker);     // Consuming food/s
                                 break;
@@ -314,7 +303,7 @@ const Game = ({ grid, setGrid, cityResources, setResources, villagers, setVillag
         }
 
         const gold = resources.find(resource => resource.type === 'gold');
-        console.log("Checking gold in winCon:", gold.quantity);
+        // console.log("Checking gold in winCon:", gold.quantity);
         // console.log(gold && gold.quantity >= 500);
         return gold && gold.quantity >= 5000;
     }
@@ -457,22 +446,28 @@ const Game = ({ grid, setGrid, cityResources, setResources, villagers, setVillag
                         <div className="game-SelectedBuilding-Content-Title">
                             {clickedBuilding.type}
                         </div>
-                        <div className="game-SelectedBuilding-Content-Buttons">
-                            <button onClick={openModal}>Hire a Villager</button>
-                        </div>
-                        <div className='game-SelectedBuilding-Content-Workers'>
-                            <h3>Assigned Workers</h3>
-                            {clickedBuilding.workers && clickedBuilding.workers.length > 0 ? (
-                                <ul>
-                                    {clickedBuilding.workers.map(workerId => {
-                                        const worker = villagers.find(v => v.id === workerId)
-                                        return <li key={workerId}>{worker?.name || 'Unknown Worker'}</li>
-                                    })}
-                                </ul>
-                            ) : (
-                                <p>No workers assigned</p>
-                            )}
-                        </div>
+                        {clickedBuilding.type !== 'House' ? (
+                            <>
+                                <div className="game-SelectedBuilding-Content-Buttons">
+                                    <button onClick={openModal}>Hire a Villager</button>
+                                </div>
+                                <div className='game-SelectedBuilding-Content-Workers'>
+                                    <h3>Assigned Workers</h3>
+                                    {clickedBuilding.workers && clickedBuilding.workers.length > 0 ? (
+                                        <ul>
+                                            {clickedBuilding.workers.map(workerId => {
+                                                const worker = villagers.find(v => v.id === workerId)
+                                                return <li key={workerId}>{worker?.name || 'Unknown Worker'}</li>
+                                            })}
+                                        </ul>
+                                    ) : (
+                                        <p>No workers assigned</p>
+                                    )}
+                                </div>
+                            </>
+                        ) : (
+                            <p>+2 Villagers</p>
+                        )}
                     </div>                
                 ) : null }
             </div>

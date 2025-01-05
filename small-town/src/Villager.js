@@ -24,7 +24,7 @@ const Villager = ({ createVillager, villagers }) => {
       <div>
         <div className='villagerListGroup'>
           <ul className='villagerListElements'>
-            {villagers.map((villager) => (
+            {villagers && villagers.map((villager) => (
               <li
                 key={villager.id}
                 onClick={(event) => liClickHandler(event, villager)}
@@ -36,9 +36,23 @@ const Villager = ({ createVillager, villagers }) => {
           </ul>
           <div className='villagerListDetails'>
             {clickedVillager && (
-              <div>
-                {clickedVillager.job}
-              </div>
+              <>
+                <div className='villagerListDetails-Name'>
+                  <h4>{clickedVillager.name}</h4>
+                </div>
+                <div className='villagerListDetails-Job'>
+                  {clickedVillager.job || "Unemployed"}
+                </div>
+                <div className='villagerListDetails-Inventory'>
+                  <ul>
+                    {clickedVillager?.inventory?.map((item) => (
+                      <li key={item.id}>
+                        {item.name} {item.quantity}
+                      </li>
+                    ))}
+                  </ul>
+                </div>
+              </>
             )}
           </div>
         </div>

@@ -28,6 +28,7 @@ const Game = ({ grid, setGrid, cityResources, setResources, villagers, setVillag
     // Hire Vilaggers modal
     const [isModalOpen, setModalOpen] = useState(false); // Modal toggle
     const [availableVillagers, setAvailableVillagers] = useState([]); // Villagers to display
+    const villagersRef = useRef(villagers)
 
     //#endregion
 
@@ -67,35 +68,45 @@ const Game = ({ grid, setGrid, cityResources, setResources, villagers, setVillag
                 {type: 'gold', quantity: 10},
                 {type: 'wood', quantity: 10},
                 {type: 'stone', quantity: 0},
-            ]
+            ],
+            resourceGainPerWorker: 2,
+            foodConsumptionPerWorker: 1
         },
         { reference: "Miner", icon: '⛏️',
             cost: [
                 {type: 'gold', quantity: 10},
                 {type: 'wood', quantity: 10},
                 {type: 'stone', quantity: 10},
-            ]
+            ],
+            resourceGainPerWorker: 2,
+            foodConsumptionPerWorker: 1
         },
         { reference: "Farm", icon: '🌾',
             cost: [
                 {type: 'gold', quantity: 5},
                 {type: 'wood', quantity: 10},
                 {type: 'stone', quantity: 5},
-            ]
+            ]  ,
+            resourceGainPerWorker: 2,
+            foodConsumptionPerWorker: 1         
         },
         { reference: "Hunter", icon: '⚔️',
             cost: [
                 {type: 'gold', quantity: 5},
                 {type: 'wood', quantity: 10},
                 {type: 'stone', quantity: 5},
-            ]
+            ],
+            resourceGainPerWorker: 2,
+            foodConsumptionPerWorker: 1
         },
         { reference: "Fisher", icon: '🎣',            
             cost: [
                 {type: 'gold', quantity: 5},
                 {type: 'wood', quantity: 10},
                 {type: 'stone', quantity: 5},
-            ]
+            ],
+            resourceGainPerWorker: 2,
+            foodConsumptionPerWorker: 1
         },
     ];
     //#endregion
@@ -183,20 +194,39 @@ const Game = ({ grid, setGrid, cityResources, setResources, villagers, setVillag
             if (elapsedTime >= 1) {                
 
                 Object.entries(buildingCount.current).forEach(([buildingType, count]) => {
-                    switch (buildingType) {
-                        case "Lumberjack":
-                            addResources("wood", count * 2);    // Getting 2 wood/s
-                            addResources("food", count * -1);   // Consuming 1 food/s
-                            break;
-                        case "Miner":
-                            addResources("stone", count * 1);   // Getting 1 stone/s
-                            addResources("food", count * -1);   // Consuming 1 food/s
-                            break;
-                        case "Farm":
-                            addResources("food", count * 1);    // Getting 1 food/s
-                            break;
-                        default:
-                            break;
+                    const building = buildingIcons.find(b => b.reference === buildingType)
+                    if (!building) return
+
+                    let workers = []
+
+                    villagersRef.current.forEach((v) => {
+                        if (v.job) workers.push(v)
+                    })
+
+                    console.log("Workers: ", workers)
+
+                    if (workers.length > 0) {
+
+                        findGems(workers)
+
+                        switch (buildingType) {
+                            case "Lumberjack":
+                                addResources("wood", workers.length * building.resourceGainPerWorker);         // Getting wood/s
+                                addResources("food", workers.length * -building.foodConsumptionPerWorker);     // Consuming food/s
+                                break;
+                            case "Miner":
+                                addResources("stone", workers.length * building.resourceGainPerWorker);        // Getting stone/s
+                                addResources("food", workers.length * -building.foodConsumptionPerWorker);     // Consuming food/s
+                                break;
+                            case "Farm": 
+                            case "Hunter": 
+                            case "Fisher":
+                                addResources("food", workers.length * building.resourceGainPerWorker);         // Getting stone/s
+                                addResources("food", workers.length * -building.foodConsumptionPerWorker);     // Consuming food/s
+                                break;
+                            default:
+                                break;
+                        }
                     }
                 });
 
@@ -235,35 +265,83 @@ const Game = ({ grid, setGrid, cityResources, setResources, villagers, setVillag
     function hasFood(resources) {
 
         if (!resources) {
-            console.log("Resources are undefined");
+            //console.log("Resources are undefined");
             return true
         }
 
         const food = resources.find(resource => resource.type === 'food');
-        console.log("Checking food in hasFood:", food);
+        //console.log("Checking food in hasFood:", food);
         return food && food.quantity > 0;
     }
+
+    const findGems = (workers) => {
+        console.log("Trying to find some gems")
+
+        const gemChance = 0.9;
+
+        workers.forEach((worker) => {
+            if (worker.job === 'Miner') {
+                console.log(`${worker.name} attempting to find a gem`)
+
+                if (Math.random() < gemChance) {
+                    console.log(`${worker.name} found a gem`)
+
+                    const villagerIndex = villagersRef.current.findIndex(v => v.id === worker.id)
+                    if (villagerIndex !== -1) {
+                        const villager = villagersRef.current[villagerIndex]
+
+                        // Update inventory in villagerRef
+                        const gemIndex = villager.inventory.findIndex(item => item.name === 'gem')
+                        if (gemIndex !== -1) {
+                            villager.inventory[gemIndex].quantity += 1
+                        } else {
+                            villager.inventory.push({ name: "gem", quantity: 1 })
+                        }
+                    }
+                } else console.log(`${worker.name} did not find a gem`)
+            }
+        })
+
+        // Only update villagers if we've made changes
+        setVillagers([...villagersRef.current])
+    };
     //#endregion
 
 
     //#region Modal
-    const openModal = () => {
-        setAvailableVillagers(villagers.filter(villager => villager.job === null)); // Filter unassigned villagers
-        setModalOpen(true);
+    const openModal = () => {  
+        setAvailableVillagers(villagers.filter(villager => villager.job === null))
+        setModalOpen(true);  // Open the modal window
     };
 
     const closeModal = () => setModalOpen(false);
 
     const hireVillager = (villagerId) => {
-        setVillagers((prevVillagers) =>
-            prevVillagers.map((villager) =>
-                villager.id === villagerId ? {
-                    ...villager,
-                    job: clickedBuilding.type,
-                    assignedBuildingID: clickedBuilding.id
-                 } : villager
+        //console.log("Hiring Villager: ", villagerId);
+
+        // setVillagers((prevVillagers) =>
+        //     prevVillagers.map((villager) =>
+        //         villager.id === villagerId ? {
+        //             ...villager,
+        //             job: clickedBuilding.type,
+        //             assignedBuildingID: clickedBuilding.id
+        //             } : villager
+        //     )
+        // );
+
+        setVillagers((prevVillagers) => {
+            const updatedVillagers = prevVillagers.map((villager) => 
+                villager.id === villagerId
+                ? { ...villager, job: clickedBuilding.type, assignedBuildingID: clickedBuilding.id }
+                : villager
             )
-        );
+
+            villagersRef.current = updatedVillagers
+
+            return updatedVillagers
+        })
+        
+        console.log("Updated villagers via ref:", villagersRef.current)
         
         if (clickedBuilding.coordinates) {
             const { row, col } = clickedBuilding.coordinates
@@ -273,14 +351,10 @@ const Game = ({ grid, setGrid, cityResources, setResources, villagers, setVillag
                 
                 // Ensure workers array is defined
                 const building = newGrid[row][col]
-                if (!building.workers) {
-                    building.workers = []
-                }
+                if (!building.workers) building.workers = []
 
                 // Add the villager only if they're not already in the list
-                if (!building.workers.includes(villagerId)) {
-                    building.workers.push(villagerId)
-                }
+                if (!building.workers.includes(villagerId)) building.workers.push(villagerId)
                 
                 return newGrid
             })
@@ -291,10 +365,11 @@ const Game = ({ grid, setGrid, cityResources, setResources, villagers, setVillag
         alert(`Villager ${villagerId} Hired`)
         closeModal();
     };
+    
     //#endregion
 
     useEffect(() => {
-        console.log("Updated cityResources: ", cityResources);
+        //console.log("Updated cityResources: ", cityResources);
 
         if (!hasFood(cityResources)) {
             alert("Game Over")
@@ -304,7 +379,7 @@ const Game = ({ grid, setGrid, cityResources, setResources, villagers, setVillag
         
     }, [cityResources]);
 
-    useEffect(() => {
+    useEffect(() => {        
         return () => {
             // Clean up on unmount
             loopActive.current = false;

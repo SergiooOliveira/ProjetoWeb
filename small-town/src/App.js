@@ -88,41 +88,39 @@ export default function App() {
   };
 
   const testData = function() {
-    const defaultVillager1 = {
-      id: 0,
-      name: "John",
-      yearOfBirth: 2000,
-      job: null,
-      gender: 'M',
-      inventory: [
-        { name: "wood", quantity: 100, }
-      ],
-      stats: [
-        { health: 100, },
-        { strength  : 10, },
-        { vigor: 20, },
-      ]
-    }
-
-    const defaultVillager2 = {
+    const defaultVillagers = [
+      {
+        id: 0,
+        name: "John",
+        yearOfBirth: 2000,
+        job: null,
+        gender: 'M',
+        inventory: [
+          { name: "wood", quantity: 100, }
+        ],
+        stats: [
+          { type: "health", value: 100, },
+          { type: "strength", value: 10, },
+          { type: "vigor", value: 20, },
+        ]
+      },
+      {
       id: 1,
       name: "Sarah",
       yearOfBirth: 2000,
       job: null,
       gender: 'F',
-      inventory: {
-        name: "wood",
-        quantity: 100,
-      },
-      stats: {
-        health: 100,
-        strength: 10,
-        vigor: 20,
-      }
-    }
+      inventory: [
+        { name: "wood", quantity: 100, }
+      ],
+      stats: [
+        { type: "health", value: 100, },
+        { type: "strength", value: 10, },
+        { type: "vigor", value: 20, },
+      ]
+    }]
 
-    setVillagers(defaultVillager1)
-    setVillagers([...villagers, defaultVillager2])
+    setVillagers(defaultVillagers)    
     
     setVillage((prevVillage) => ({
       ...prevVillage,

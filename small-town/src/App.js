@@ -6,6 +6,11 @@ import Game from './Game';
 import Counter from './Calendar';
 import React, { useState, useEffect, useRef } from 'react';
 
+
+// FIREBASE
+import { doc, setDoc, getDoc, updateDoc, onSnapshot } from "firebase/firestore";
+import { db } from "./firebase";
+
 //#region TODO:
 /*
   - Verify if resource type already exists in list and Add to it
@@ -14,6 +19,14 @@ import React, { useState, useEffect, useRef } from 'react';
 //#endregion
 
 export default function App() {
+
+  //FIREBASE
+  const [startTime, setStartTime] = useState(Date.now());
+  const [hasReached5000, setHasReached5000] = useState(false);
+  const [elapsedTimes, setElapsedTimes] = useState([]); // To store the times fetched from Firestore
+  const docRef = doc(db, "gameData", "elapsedTimes"); // Firebase document reference
+
+
 
   //#region Variables
   // useState
@@ -177,6 +190,73 @@ export default function App() {
     setMaxResources(maxResourcesByLevel)
   }, []);
 
+
+    /******************FIREBASE************************* */
+     // Fetch times from Firebase when the app loads
+     useEffect(() => {
+      const fetchTimes = async () => {
+        try {
+          const docSnap = await getDoc(docRef);
+          if (docSnap.exists()) {
+            setElapsedTimes(docSnap.data().times || []);
+          } else {
+            console.log("No times found in Firestore.");
+          }
+        } catch (error) {
+          console.error("Error fetching times from Firestore:", error);
+        }
+      };
+  
+      fetchTimes();
+  
+      // Real-time listener for changes to the times document
+      const unsubscribe = onSnapshot(docRef, (docSnap) => {
+        if (docSnap.exists()) {
+          setElapsedTimes(docSnap.data().times || []);
+        }
+      });
+  
+      return () => unsubscribe(); // Cleanup listener on component unmount
+    }, []);
+  
+    // Save elapsed time to Firebase
+    const saveElapsedTimeToFirebase = async (elapsedTime) => {
+      try {
+        const docSnap = await getDoc(docRef);
+        if (docSnap.exists()) {
+          await updateDoc(docRef, {
+            times: [...docSnap.data().times, elapsedTime],
+          });
+        } else {
+          await setDoc(docRef, { times: [elapsedTime] });
+        }
+        console.log("Time saved:", elapsedTime);
+      } catch (error) {
+        console.error("Error saving elapsed time:", error);
+      }
+    };
+  
+    // Track gold and save elapsed time when it reaches 5000
+    useEffect(() => {
+      if (cityResources) {
+        const goldResource = cityResources.find((resource) => resource.type === "gold");
+        if (goldResource && goldResource.quantity >= 5000) {
+          if (!hasReached5000) {
+            // alert("Won")
+            const elapsedTime = (Date.now() - startTime) / 1000; // Time in seconds
+            saveElapsedTimeToFirebase(elapsedTime);
+            setStartTime(Date.now()); // Reset start time
+            setHasReached5000(true); // Mark as reached
+          }
+        } else {
+          setHasReached5000(false); // Reset when gold drops below 5000
+        }
+      }
+    }, [cityResources]);
+  
+  
+    /******************FIREBASE************************* */
+
   // JSX elements
   return (
     <main>
@@ -215,9 +295,16 @@ export default function App() {
             <Resources cityResources={cityResources} maxResources={maxResources}/>
           </div>
           {/*<button onClick={generateRandomResource}>Create Resource</button>*/}
-          <div className='eventList-Listing'>
-            
+          {/*  MOSTRAR OS TEMPOS*/}
+          <div className="eventList-Listing">
+            <h3>Elapsed Times (seconds):</h3>
+            <ul>
+                {elapsedTimes.map((time, index) => (
+                <li key={index}>Time {index + 1}: {time}s</li>
+                ))}
+            </ul>
           </div>
+          {/*******************/ }
         </div>  
       </div>
       </body>

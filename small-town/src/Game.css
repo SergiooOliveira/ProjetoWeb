@@ -61,7 +61,7 @@
     gap: 5px;
     padding: 10px;
     background-color: #f9f9f9;
-    border: solid 1px #ddd;
+    /* border: solid 1px #ddd; */
     border-radius: 8px;
     justify-content: center;
 }
@@ -142,7 +142,8 @@
 
 /* Selected building group */
 .game-SelectedBuilding {
-    border: solid 1px red;
+    /* border: solid 1px red; */
+    background-color: #ccc;
     display: flex;
     width: 300px;
     margin-left: 100px;
@@ -156,7 +157,7 @@
 }
 
 .game-SelectedBuilding-Content-Title {
-    border: solid 1px violet;
+    /* border: solid 1px violet; */
     width: 100%;
     height: 25px;
     display: flex;
@@ -165,7 +166,7 @@
 }
 
 .game-SelectedBuilding-Content-Buttons {
-    border: solid 1px violet;
+    /* border: solid 1px violet; */
     width: 100%;
     height: 25px;
     display: flex;
@@ -174,7 +175,7 @@
 }
 
 .game-SelectedBuilding-Content-Workers {
-    border: solid 1px violet;
+    /* border: solid 1px violet; */
     width: 100%;
     display: flex;
     flex-direction: column;
@@ -190,10 +191,10 @@
 }
 
 .game-SelectedBuilding-Content-Workers ul {
-    list-style-type: none; /* Removes bullets from list */
+    list-style-type: none;
     padding: 0;
-    margin: 10px 0 0; /* Adds spacing between h3 and list */
-    text-align: left; /* Ensures text is aligned to the center */
+    margin: 10px 0 0;
+    text-align: left;
     width: 100%;
 }
 
@@ -201,6 +202,6 @@
     font-size: 16px;
     margin-top: 5px;
     margin-left: 10px;
-    color: #555; /* Subtle text color */
+    color: #555;
     text-align: left;
 }

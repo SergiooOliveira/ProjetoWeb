@@ -1,7 +1,8 @@
 /* Header */
 header {
     width:100%;
-    border: 1px solid red;
+    /* border: 1px solid red; */
+    background-color: lightskyblue;
     position: relative; 
     padding: 0;
     margin: 0;

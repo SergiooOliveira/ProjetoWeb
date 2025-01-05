@@ -34,21 +34,6 @@ const Game = ({ grid, setGrid, cityResources, setResources, villagers, setVillag
 
     //#region Building Icons
     const buildingIcons = [
-        /*{ reference: "empty", icon: '',
-            behaviour: () => null,
-            cost: [
-                {type: 'gold', quantity: 0},
-                {type: 'wood', quantity: 0},
-                {type: 'stone', quantity: 0},
-            ]
-        },*/
-        { reference: "Road", icon: '🛣️',
-            cost: [
-                {type: 'gold', quantity: 5},
-                {type: 'wood', quantity: 0},
-                {type: 'stone', quantity: 10},
-            ]
-        },
         { reference: "Town Hall", icon: '🏛️',
             cost: [
                 {type: 'gold', quantity: 10},
